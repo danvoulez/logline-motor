@@ -1,0 +1,109 @@
+{
+  "type": "deployment.registry",
+  "version": "1.0.0",
+  "timestamp": "2025-08-03T18:56:20+01:00",
+  "id": "d4c9f3e8-7b2a-4f8d-9e6a-2c5f9d8b1a3c",
+  "creator": "voulezvous.ai",
+  "package": {
+    "name": "institutional-deployment-orchestrator",
+    "version": "1.0.0",
+    "description": "Orquestrador de Deployment Institucional para LogLine",
+    "institutional_tier": "sovereign",
+    "components": [
+      {
+        "name": "deployment-orchestrator",
+        "path": "src/deployment/orchestrator.rs",
+        "hash": "sha256:e2f5d3c2a1b8f7e4d6c9f0b1a3c5e7d8f9a2b5c4d6e8f9a2b5c4d6e8f9a2b5c4d",
+        "capability": "deployment.orchestration"
+      },
+      {
+        "name": "wasm-integration",
+        "path": "src/deployment/wasm_integration.rs",
+        "hash": "sha256:f3e2d1c8a7b4f5e9d6c3f2a1b8e7d4f5c9e2a1b8d7c4f5e9d6c3f2a1b8e7d4f5c",
+        "capability": "deployment.wasm.execution"
+      },
+      {
+        "name": "timeline-integration",
+        "path": "src/deployment/timeline_integration.rs",
+        "hash": "sha256:a1c8e7d4f5b9c2e3a1f8d7e4f5c9b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a3f8d7e",
+        "capability": "deployment.timeline.tracking"
+      },
+      {
+        "name": "api-server",
+        "path": "src/deployment/api.rs",
+        "hash": "sha256:b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a3f8d7e",
+        "capability": "deployment.api"
+      },
+      {
+        "name": "config-manager",
+        "path": "src/deployment/config.rs",
+        "hash": "sha256:c3b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a3f8d",
+        "capability": "deployment.config"
+      },
+      {
+        "name": "metrics-collector",
+        "path": "src/deployment/metrics.rs",
+        "hash": "sha256:d4c3b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a3f",
+        "capability": "deployment.metrics"
+      }
+    ],
+    "plugins": [
+      {
+        "name": "infra-default",
+        "path": "lllpack/plugins/infra.wasm",
+        "hash": "sha256:e5d4c3b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a1f8d7e4f5c9b2a3f8d7e4f5c9b2a",
+        "version": "1.0.0",
+        "verified": true
+      }
+    ]
+  },
+  "governance": {
+    "audit_trail": true,
+    "reversibility": "guaranteed",
+    "approval_required": true,
+    "span_generation": "mandatory",
+    "validation_steps": [
+      "signature_verification",
+      "capability_check",
+      "security_scan",
+      "timeline_readiness"
+    ],
+    "contracts": [
+      "deployment.initiation",
+      "deployment.phase.completion",
+      "deployment.completion",
+      "rollback.initiation",
+      "rollback.completion"
+    ]
+  },
+  "security": {
+    "signature": "ed25519:8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e",
+    "certification": {
+      "authority": "voulezvous.ai",
+      "timestamp": "2025-08-03T18:56:20+01:00",
+      "valid_until": "2026-08-03T18:56:20+01:00"
+    },
+    "integrity_checks": [
+      "wasm_sandbox_isolation",
+      "capability_boundaries",
+      "sensitive_data_handling",
+      "resource_access_control"
+    ]
+  },
+  "timeline": {
+    "span_types": [
+      "deployment.initiation",
+      "deployment.phase",
+      "deployment.completion",
+      "deployment.rollback",
+      "deployment.validation",
+      "deployment.observability"
+    ],
+    "span_retention": "permanent",
+    "observability": {
+      "metrics_enabled": true,
+      "log_level": "info",
+      "trace_collection": true
+    }
+  }
+}

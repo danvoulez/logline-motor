@@ -1,0 +1,273 @@
+// LogLine Boot Sequence
+// Sequência de spans executados durante inicialização do lllpack
+// --------------------------------------------------------------
+
+contract BootSequence {
+  title: "Sequência de Boot Institucional"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-03"
+  tags: ["boot", "institutional", "startup", "genesis", "lllpack"]
+  
+  // Span principal de boot
+  span BootInstitution {
+    id: "boot-${timestamp}-${random_id}"
+    type: "boot_institutional"
+    timestamp: "${current_time}"
+    actors: ["logline_vm", "system"]
+    fields: [
+      { name: "lllpack_name", value: "logline-core-institutional" },
+      { name: "lllpack_version", value: "1.0.0" },
+      { name: "boot_mode", value: "full" },
+      { name: "status", value: "initializing" }
+    ]
+    children: [
+      "InitializeTimeline",
+      "LoadContracts",
+      "ActivateAgents",
+      "ConnectEmbeddings",
+      "RunDiagnostic",
+      "ReportBootStatus"
+    ]
+  }
+  
+  // Inicialização da timeline
+  span InitializeTimeline {
+    id: "timeline-init-${timestamp}"
+    type: "timeline_initialize"
+    timestamp: "${current_time}"
+    actors: ["timeline_manager"]
+    fields: [
+      { name: "timeline_path", value: "timeline/main.timeline" },
+      { name: "mode", value: "append" },
+      { name: "max_entries", value: "10000" },
+      { name: "status", value: "initializing" }
+    ]
+    timeouts: {
+      execution: "30" // segundos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "initialized" }
+      ]
+    }
+    on_failure: {
+      span: "TimelineRecovery"
+    }
+  }
+  
+  // Carregamento de contratos institucionais
+  span LoadContracts {
+    id: "contracts-load-${timestamp}"
+    type: "contract_load"
+    timestamp: "${current_time}"
+    actors: ["contract_manager"]
+    depends_on: ["InitializeTimeline"]
+    fields: [
+      { name: "contract_path", value: "contracts/" },
+      { name: "contracts_count", value: "0" },
+      { name: "validator_plugin", value: "validator.wasm" },
+      { name: "status", value: "loading" }
+    ]
+    timeouts: {
+      execution: "60" // segundos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "loaded" },
+        { name: "contracts_count", value: "${loaded_count}" }
+      ]
+    }
+    on_failure: {
+      span: "ContractLoadFailure"
+    }
+  }
+  
+  // Ativação de agentes institucionais
+  span ActivateAgents {
+    id: "agents-activate-${timestamp}"
+    type: "agent_initialize"
+    timestamp: "${current_time}"
+    actors: ["agent_manager"]
+    depends_on: ["LoadContracts"]
+    fields: [
+      { name: "agent_path", value: "agents/" },
+      { name: "primary_agent", value: "companheiro_institucional.lll" },
+      { name: "status", value: "activating" }
+    ]
+    timeouts: {
+      execution: "90" // segundos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "activated" },
+        { name: "agents_count", value: "${activated_count}" }
+      ]
+    }
+    on_failure: {
+      span: "AgentActivationFailure"
+    }
+  }
+  
+  // Conexão com embeddings e memória vetorial
+  span ConnectEmbeddings {
+    id: "embeddings-connect-${timestamp}"
+    type: "embed_load"
+    timestamp: "${current_time}"
+    actors: ["embedding_manager"]
+    depends_on: ["LoadContracts"]
+    fields: [
+      { name: "embedding_path", value: "embeddings/knowledge.index" },
+      { name: "dimension", value: "1536" },
+      { name: "algorithm", value: "hnsw" },
+      { name: "status", value: "connecting" }
+    ]
+    timeouts: {
+      execution: "60" // segundos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "connected" },
+        { name: "vectors_count", value: "${loaded_vectors}" }
+      ]
+    }
+    on_failure: {
+      span: "EmbeddingConnectFailure"
+    }
+  }
+  
+  // Diagnóstico do sistema
+  span RunDiagnostic {
+    id: "diagnostic-${timestamp}"
+    type: "diagnostic"
+    timestamp: "${current_time}"
+    actors: ["diagnostic_service"]
+    depends_on: ["InitializeTimeline", "LoadContracts", "ActivateAgents", "ConnectEmbeddings"]
+    fields: [
+      { name: "check_contracts", value: "true" },
+      { name: "check_timeline", value: "true" },
+      { name: "check_agents", value: "true" },
+      { name: "status", value: "running" }
+    ]
+    timeouts: {
+      execution: "30" // segundos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "health_status", value: "${health_status}" },
+        { name: "issues_found", value: "${issues_count}" }
+      ]
+    }
+    on_failure: {
+      span: "DiagnosticFailure"
+    }
+  }
+  
+  // Relatório de status de boot
+  span ReportBootStatus {
+    id: "boot-report-${timestamp}"
+    type: "boot_report"
+    timestamp: "${current_time}"
+    actors: ["system"]
+    depends_on: ["RunDiagnostic"]
+    fields: [
+      { name: "boot_duration_ms", value: "${boot_duration}" },
+      { name: "contracts_loaded", value: "${contracts_count}" },
+      { name: "agents_active", value: "${agents_count}" },
+      { name: "status", value: "reporting" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "boot_complete" },
+        { name: "timestamp_complete", value: "${current_time}" }
+      ]
+    }
+    on_failure: {
+      span: "BootFailure"
+    }
+  }
+  
+  // Procedimentos de recuperação
+  
+  // Recuperação de timeline
+  span TimelineRecovery {
+    id: "timeline-recovery-${timestamp}"
+    type: "timeline_recovery"
+    timestamp: "${current_time}"
+    actors: ["recovery_service"]
+    fields: [
+      { name: "recovery_mode", value: "snapshot" },
+      { name: "snapshot_path", value: "timeline/snapshot_001.timeline" },
+      { name: "status", value: "recovering" }
+    ]
+    timeouts: {
+      execution: "60" // segundos
+    }
+  }
+  
+  // Falha de carregamento de contratos
+  span ContractLoadFailure {
+    id: "contract-failure-${timestamp}"
+    type: "contract_failure"
+    timestamp: "${current_time}"
+    actors: ["error_handler"]
+    fields: [
+      { name: "error_type", value: "contract_load_failure" },
+      { name: "recovery_action", value: "fallback_contracts" },
+      { name: "status", value: "handling" }
+    ]
+  }
+  
+  // Falha de ativação de agentes
+  span AgentActivationFailure {
+    id: "agent-failure-${timestamp}"
+    type: "agent_failure"
+    timestamp: "${current_time}"
+    actors: ["error_handler"]
+    fields: [
+      { name: "error_type", value: "agent_activation_failure" },
+      { name: "recovery_action", value: "fallback_agents" },
+      { name: "status", value: "handling" }
+    ]
+  }
+  
+  // Falha de conexão com embeddings
+  span EmbeddingConnectFailure {
+    id: "embedding-failure-${timestamp}"
+    type: "embedding_failure"
+    timestamp: "${current_time}"
+    actors: ["error_handler"]
+    fields: [
+      { name: "error_type", value: "embedding_connect_failure" },
+      { name: "recovery_action", value: "skip_embeddings" },
+      { name: "status", value: "handling" }
+    ]
+  }
+  
+  // Falha de diagnóstico
+  span DiagnosticFailure {
+    id: "diagnostic-failure-${timestamp}"
+    type: "diagnostic_failure"
+    timestamp: "${current_time}"
+    actors: ["error_handler"]
+    fields: [
+      { name: "error_type", value: "diagnostic_failure" },
+      { name: "recovery_action", value: "continue_with_warnings" },
+      { name: "status", value: "handling" }
+    ]
+  }
+  
+  // Falha completa de boot
+  span BootFailure {
+    id: "boot-failure-${timestamp}"
+    type: "boot_failure"
+    timestamp: "${current_time}"
+    actors: ["error_handler"]
+    fields: [
+      { name: "error_type", value: "boot_failure" },
+      { name: "recovery_action", value: "emergency_mode" },
+      { name: "status", value: "critical_failure" }
+    ]
+  }
+}

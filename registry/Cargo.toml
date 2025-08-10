@@ -1,0 +1,14 @@
+[package]
+name = "registry"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "Registro central de entidades para o sistema LogLine"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+once_cell  = "1.17"
+tokio      = { version = "1", features = ["rt","sync"] }
+uuid       = { version = "1", features = ["v4"] }
+chrono     = { version = "0.4" }

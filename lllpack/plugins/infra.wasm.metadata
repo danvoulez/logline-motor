@@ -1,0 +1,292 @@
+{
+  "plugin_metadata": {
+    "name": "infra_plugin",
+    "version": "1.0.0",
+    "description": "Plugin WASM de Infraestrutura para orquestração de deployment",
+    "author": "LogLine Engineering Team",
+    "created": "2025-08-05T14:32:10Z",
+    "hash": "0x7a9b23c8d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a3",
+    "signature": "0xd4e5f6a7b8c9a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b1c2d3e4f5a6b7"
+  },
+  
+  "plugin_capabilities": {
+    "deployment": true,
+    "infrastructure": true,
+    "network": true,
+    "file_system": {
+      "read": true,
+      "write": true,
+      "paths": [
+        "deployments/",
+        "artifacts/",
+        "logs/deployment/"
+      ]
+    },
+    "execution": {
+      "subprocesses": true,
+      "max_runtime": 3600,
+      "memory_limit_mb": 512
+    },
+    "timeline": {
+      "read": true,
+      "write": true,
+      "spans": ["deployment", "infrastructure", "resource"]
+    }
+  },
+  
+  "plugin_interface": {
+    "exports": [
+      {
+        "name": "deploy",
+        "description": "Executa um deployment completo",
+        "parameters": [
+          { "name": "deployment_plan", "type": "string", "description": "Plano de deployment em formato JSON" },
+          { "name": "environment", "type": "string", "description": "Ambiente alvo (dev, staging, prod)" },
+          { "name": "options", "type": "object", "description": "Opções adicionais para o deployment" }
+        ],
+        "returns": { "type": "object", "description": "Resultado do deployment com status e informações" }
+      },
+      {
+        "name": "provision_resources",
+        "description": "Provisiona recursos de infraestrutura",
+        "parameters": [
+          { "name": "resource_spec", "type": "string", "description": "Especificação dos recursos em formato JSON" },
+          { "name": "region", "type": "string", "description": "Região para provisionamento" },
+          { "name": "options", "type": "object", "description": "Opções adicionais para provisionamento" }
+        ],
+        "returns": { "type": "object", "description": "Detalhes dos recursos provisionados" }
+      },
+      {
+        "name": "rollback",
+        "description": "Executa rollback de deployment",
+        "parameters": [
+          { "name": "deployment_id", "type": "string", "description": "ID do deployment a ser revertido" },
+          { "name": "step", "type": "integer", "description": "Ponto específico para rollback (-1 para completo)" },
+          { "name": "options", "type": "object", "description": "Opções adicionais para rollback" }
+        ],
+        "returns": { "type": "object", "description": "Resultado do rollback" }
+      },
+      {
+        "name": "check_status",
+        "description": "Verifica status de deployment ou recursos",
+        "parameters": [
+          { "name": "entity_id", "type": "string", "description": "ID do deployment ou recurso" },
+          { "name": "entity_type", "type": "string", "description": "Tipo de entidade (deployment, resource)" }
+        ],
+        "returns": { "type": "object", "description": "Status atual da entidade" }
+      },
+      {
+        "name": "cleanup_resources",
+        "description": "Limpa recursos não utilizados",
+        "parameters": [
+          { "name": "resource_ids", "type": "array", "description": "Lista de IDs de recursos" },
+          { "name": "force", "type": "boolean", "description": "Força remoção mesmo se em uso" }
+        ],
+        "returns": { "type": "object", "description": "Relatório de limpeza" }
+      }
+    ],
+    "imports": [
+      {
+        "namespace": "timeline",
+        "functions": ["create_span", "read_span", "update_span"]
+      },
+      {
+        "namespace": "filesystem",
+        "functions": ["read_file", "write_file", "list_directory"]
+      },
+      {
+        "namespace": "network",
+        "functions": ["http_request", "check_connectivity"]
+      },
+      {
+        "namespace": "process",
+        "functions": ["execute_command", "check_process_status"]
+      },
+      {
+        "namespace": "log",
+        "functions": ["info", "warning", "error", "debug"]
+      }
+    ]
+  },
+  
+  "plugin_sequences": {
+    "deployment_sequence": [
+      {
+        "step": "validate_deployment_plan",
+        "function": "internal.validate_plan",
+        "description": "Valida o plano de deployment contra esquema e políticas",
+        "timeout_seconds": 60,
+        "on_failure": "abort"
+      },
+      {
+        "step": "provision_infrastructure",
+        "function": "provision_resources",
+        "description": "Provisiona recursos de infraestrutura necessários",
+        "timeout_seconds": 600,
+        "on_failure": "rollback"
+      },
+      {
+        "step": "prepare_artifacts",
+        "function": "internal.prepare_artifacts",
+        "description": "Prepara artefatos para deployment",
+        "timeout_seconds": 300,
+        "on_failure": "rollback"
+      },
+      {
+        "step": "deploy_components",
+        "function": "internal.deploy_components",
+        "description": "Implanta componentes na infraestrutura",
+        "timeout_seconds": 900,
+        "on_failure": "rollback"
+      },
+      {
+        "step": "verify_deployment",
+        "function": "internal.verify_deployment",
+        "description": "Verifica se o deployment foi bem-sucedido",
+        "timeout_seconds": 300,
+        "on_failure": "alert"
+      },
+      {
+        "step": "update_routing",
+        "function": "internal.update_routing",
+        "description": "Atualiza configuração de roteamento",
+        "timeout_seconds": 180,
+        "on_failure": "rollback"
+      },
+      {
+        "step": "finalize_deployment",
+        "function": "internal.finalize_deployment",
+        "description": "Finaliza o processo de deployment",
+        "timeout_seconds": 120,
+        "on_failure": "log_only"
+      }
+    ],
+    "rollback_sequence": [
+      {
+        "step": "revert_routing",
+        "function": "internal.revert_routing",
+        "description": "Reverte configuração de roteamento",
+        "timeout_seconds": 180,
+        "on_failure": "alert"
+      },
+      {
+        "step": "restore_previous_version",
+        "function": "internal.restore_version",
+        "description": "Restaura versão anterior dos componentes",
+        "timeout_seconds": 600,
+        "on_failure": "alert"
+      },
+      {
+        "step": "verify_rollback",
+        "function": "internal.verify_rollback",
+        "description": "Verifica se o rollback foi bem-sucedido",
+        "timeout_seconds": 300,
+        "on_failure": "alert"
+      },
+      {
+        "step": "cleanup_failed_deployment",
+        "function": "cleanup_resources",
+        "description": "Limpa recursos do deployment falho",
+        "timeout_seconds": 300,
+        "on_failure": "log_only"
+      },
+      {
+        "step": "finalize_rollback",
+        "function": "internal.finalize_rollback",
+        "description": "Finaliza o processo de rollback",
+        "timeout_seconds": 120,
+        "on_failure": "log_only"
+      }
+    ]
+  },
+  
+  "plugin_permissions": {
+    "required": [
+      "filesystem:read:deployments/",
+      "filesystem:write:deployments/",
+      "filesystem:write:logs/deployment/",
+      "timeline:create:deployment",
+      "timeline:update:deployment",
+      "network:http:*",
+      "execution:subprocess"
+    ],
+    "optional": [
+      "notification:send"
+    ]
+  },
+  
+  "plugin_dependencies": [
+    {
+      "name": "wasm_sandbox",
+      "version": ">=1.0.0",
+      "required": true
+    },
+    {
+      "name": "timeline_core",
+      "version": ">=1.0.0",
+      "required": true
+    },
+    {
+      "name": "logline_runtime",
+      "version": ">=1.0.0",
+      "required": true
+    }
+  ],
+  
+  "plugin_schemas": {
+    "deployment_plan": {
+      "type": "object",
+      "required": ["name", "version", "components", "environment"],
+      "properties": {
+        "name": { "type": "string", "description": "Nome do deployment" },
+        "version": { "type": "string", "description": "Versão do deployment" },
+        "environment": { "type": "string", "enum": ["dev", "staging", "prod"] },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "source", "destination"],
+            "properties": {
+              "name": { "type": "string" },
+              "source": { "type": "string" },
+              "destination": { "type": "string" },
+              "configuration": { "type": "object" },
+              "dependencies": { "type": "array", "items": { "type": "string" } },
+              "health_check": { "type": "object" }
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "compute": { "type": "object" },
+            "storage": { "type": "object" },
+            "network": { "type": "object" },
+            "database": { "type": "object" }
+          }
+        },
+        "rollback_strategy": {
+          "type": "object",
+          "properties": {
+            "automatic": { "type": "boolean" },
+            "thresholds": { "type": "object" },
+            "steps": { "type": "array" }
+          }
+        }
+      }
+    }
+  },
+  
+  "sandbox_configuration": {
+    "memory_limit_mb": 512,
+    "cpu_limit_percent": 80,
+    "execution_timeout_seconds": 3600,
+    "max_network_requests": 1000,
+    "max_file_size_mb": 100,
+    "environment_variables": {
+      "DEPLOYMENT_ROOT": "deployments/",
+      "LOG_LEVEL": "info",
+      "MAX_RETRIES": "3"
+    }
+  }
+}

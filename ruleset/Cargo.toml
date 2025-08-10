@@ -1,0 +1,11 @@
+[package]
+name = "ruleset"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "Motor de regras para avaliação de entidades LogLine"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+serde           = { version = "1.0", features = ["derive"] }

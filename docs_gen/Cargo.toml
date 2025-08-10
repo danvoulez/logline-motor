@@ -1,0 +1,13 @@
+[package]
+name = "docs_gen"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "Gerador de documentação a partir dos comentários e código-fonte do projeto"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+walkdir      = "2"
+regex        = "1"
+chrono       = "0.4"

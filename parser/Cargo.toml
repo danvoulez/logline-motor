@@ -1,0 +1,11 @@
+[package]
+name = "parser"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "Parser para a linguagem LogLine, usando combinators"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+nom           = "7.1"

@@ -1,0 +1,15 @@
+[package]
+name = "ideas"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "Biblioteca para gestão de ideias no sistema LogLine"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+serde         = { version = "1.0", features = ["derive"] }
+serde_json    = "1.0"
+chrono        = { version = "0.4", features = ["serde"] }
+uuid          = { version = "1", features = ["serde", "v4"] }
+once_cell     = "1.17"

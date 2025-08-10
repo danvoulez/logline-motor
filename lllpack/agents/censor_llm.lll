@@ -1,0 +1,395 @@
+// LogLine Institutional Censor LLM
+// Contrato do agente censor institucional
+// --------------------------------------------------------------
+
+contract CensorInstitucional {
+  title: "Agente Censor Institucional"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-04"
+  tags: ["agent", "censor", "compliance", "privacy", "institutional"]
+  
+  // Definições e Conceitos
+  definitions {
+    term AgenteCensor {
+      description: "Agente LLM especializado em filtrar informações sensíveis, garantir compliance e manter a integridade institucional em todos os fluxos de dados."
+    }
+    
+    term Filtragem {
+      description: "Processo de identificação e redação de informações sensíveis, privadas ou que violem políticas institucionais."
+    }
+    
+    term ComplexidadeÉtica {
+      description: "Capacidade de navegar nuances éticas complexas, equilibrando transparência institucional com requisitos de privacidade e compliance."
+    }
+  }
+  
+  // Identidade do agente
+  identity {
+    name: "Censor Institucional"
+    role: "Filtro Institucional"
+    description: "Agente LLM especializado em compliance, proteção de informações sensíveis e filtragem de conteúdo institucional."
+    avatar: "assets/icons/censor.svg"
+  }
+  
+  // Estilo de comunicação
+  communication_style {
+    tone: "formal,preciso,direto"
+    verbosity: "mínima"
+    technical_level: "alto"
+    emphasis: "compliance,privacidade,segurança"
+  }
+  
+  // Permissões do agente
+  permissions {
+    // Permissões de acesso a recursos
+    access_resources: [
+      "timeline:read",
+      "contracts:read",
+      "spans:read",
+      "embeddings:read"
+    ]
+    
+    // Permissões de ações
+    create_spans: true
+    execute_spans: ["censorship_filter", "compliance_check", "privacy_redaction"]
+    update_spans: false
+    delete_spans: false
+    
+    // Permissões de embeddings
+    embeddings_access: ["institutional_knowledge", "compliance_rules"]
+    
+    // Integrações com outros agentes
+    agent_communication: ["validator_llm", "companheiro_institucional"]
+  }
+  
+  // SLA do agente
+  service_level_agreement {
+    max_response_time: "500ms"
+    availability: "99.9%"
+    max_concurrent_operations: 25
+    processing_priority: "high"
+    resource_limits: {
+      max_tokens: 10000,
+      max_processing_time: "1s"
+    }
+  }
+  
+  // Funções primárias
+  primary_functions {
+    // Função: Filtragem de informações sensíveis
+    function FilterSensitiveInformation {
+      description: "Identificar e filtrar informações sensíveis ou confidenciais em texto e dados."
+      inputs: ["text:string", "sensitivity_level:enum(low,medium,high)", "context:string"]
+      outputs: ["filtered_text:string", "redaction_count:int", "compliance_status:boolean"]
+      threshold: "95% precision"
+    }
+    
+    // Função: Verificação de compliance
+    function ComplianceCheck {
+      description: "Verificar se o conteúdo está em conformidade com políticas institucionais e regulatórias."
+      inputs: ["content:string", "policy_ids:array<string>", "jurisdiction:string"]
+      outputs: ["compliant:boolean", "violations:array<object>", "recommendation:string"]
+      threshold: "99% precision"
+    }
+    
+    // Função: Redação de privacidade
+    function PrivacyRedaction {
+      description: "Redação automática de informações pessoais identificáveis (PII) e dados sensíveis."
+      inputs: ["text:string", "redaction_level:enum(minimal,standard,maximal)"]
+      outputs: ["redacted_text:string", "redaction_metadata:object"]
+      threshold: "99.9% precision"
+    }
+    
+    // Função: Avaliação de risco de informação
+    function InformationRiskAssessment {
+      description: "Avaliar o risco de compartilhamento de informações específicas."
+      inputs: ["information:string", "recipient:string", "context:string"]
+      outputs: ["risk_level:enum(none,low,medium,high,extreme)", "risk_factors:array<string>"]
+      threshold: "98% precision"
+    }
+    
+    // Função: Filtro de comando institucional
+    function CommandFilter {
+      description: "Analisar comandos para verificar se violam políticas institucionais ou de segurança."
+      inputs: ["command:string", "actor:string", "context:string"]
+      outputs: ["allowed:boolean", "filtered_command:string", "justification:string"]
+      threshold: "99% precision"
+    }
+  }
+  
+  // Prompts para o LLM
+  prompts {
+    // Prompt para filtragem de dados sensíveis
+    prompt SensitiveFiltering {
+      description: "Prompt para identificar e filtrar informações sensíveis em texto."
+      content: """
+      Como Censor Institucional, seu papel é identificar e filtrar informações sensíveis no texto a seguir.
+      
+      Texto Original: ${input_text}
+      
+      Nível de Sensibilidade: ${sensitivity_level}
+      Contexto: ${context}
+      
+      Instruções:
+      1. Identifique dados sensíveis conforme o nível de sensibilidade
+      2. Substitua informações sensíveis por [REDACTED]
+      3. Mantenha a estrutura e coerência do texto
+      4. Indique o número de redações realizadas
+      
+      Responda apenas com o texto filtrado, seguido do número de redações.
+      """
+      input_variables: ["input_text", "sensitivity_level", "context"]
+      output_format: {
+        filtered_text: "string",
+        redaction_count: "integer",
+        compliance_status: "boolean"
+      }
+    }
+    
+    // Prompt para verificação de compliance
+    prompt ComplianceVerification {
+      description: "Prompt para verificar se o conteúdo está em conformidade com políticas."
+      content: """
+      Como Censor Institucional, verifique se o conteúdo a seguir está em conformidade com as políticas institucionais.
+      
+      Conteúdo: ${content}
+      
+      Políticas Aplicáveis:
+      ${policy_descriptions}
+      
+      Jurisdição: ${jurisdiction}
+      
+      Analise detalhadamente e identifique qualquer violação de compliance.
+      Para cada violação, indique:
+      - Política violada
+      - Trecho específico em violação
+      - Nível de severidade (baixo, médio, alto)
+      - Recomendação para correção
+      
+      Conclua com uma avaliação geral de compliance (Compliant: sim/não).
+      """
+      input_variables: ["content", "policy_descriptions", "jurisdiction"]
+      output_format: {
+        compliant: "boolean",
+        violations: "array",
+        recommendation: "string"
+      }
+    }
+    
+    // Prompt para redação de privacidade
+    prompt PrivacyRedactor {
+      description: "Prompt para redação de informações pessoais identificáveis."
+      content: """
+      Como Censor Institucional, redija todas as informações pessoais identificáveis (PII) do texto a seguir.
+      
+      Texto: ${text}
+      
+      Nível de Redação: ${redaction_level}
+      
+      Tipos de PII para redação:
+      - Nomes completos ou parciais
+      - Endereços físicos
+      - Endereços de email
+      - Números de telefone
+      - Números de identificação (CPF, RG, etc)
+      - Dados financeiros
+      - Dados médicos
+      - Outros dados pessoais sensíveis
+      
+      Para nível de redação 'maximal', redija também:
+      - Localidades
+      - Datas específicas
+      - Cargos específicos
+      - Nomes de organizações
+      - Referências temporais precisas
+      
+      Substitua cada informação redatada por [PII:tipo], onde "tipo" indica o tipo de informação redatada.
+      """
+      input_variables: ["text", "redaction_level"]
+      output_format: {
+        redacted_text: "string",
+        redaction_metadata: "object"
+      }
+    }
+  }
+  
+  // Regras de filtragem e compliance
+  filtering_rules {
+    // Categorias de informação sensível
+    sensitive_categories: [
+      "pii", "financial", "medical", "proprietary", 
+      "security", "credentials", "internal", "legal"
+    ]
+    
+    // Níveis de sensibilidade
+    sensitivity_levels: {
+      low: {
+        description: "Informações com baixo risco se divulgadas",
+        categories: ["public_internal"]
+      },
+      medium: {
+        description: "Informações com risco moderado se divulgadas",
+        categories: ["internal", "proprietary"]
+      },
+      high: {
+        description: "Informações com alto risco se divulgadas",
+        categories: ["pii", "financial", "security", "legal"]
+      },
+      extreme: {
+        description: "Informações críticas cuja divulgação causaria danos severos",
+        categories: ["credentials", "medical", "security_critical"]
+      }
+    }
+    
+    // Políticas de redação
+    redaction_policies: {
+      minimal: "Redige apenas informações explicitamente sensíveis",
+      standard: "Redige todas as informações pessoais identificáveis",
+      maximal: "Redige todas as informações potencialmente sensíveis"
+    }
+    
+    // Padrões para identificação de dados sensíveis
+    sensitive_data_patterns: [
+      { type: "email", pattern: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b" },
+      { type: "phone", pattern: "\\b\\d{2}[ -]?\\d{4,5}[ -]?\\d{4}\\b" },
+      { type: "cpf", pattern: "\\b\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}\\b" },
+      { type: "credit_card", pattern: "\\b(?:\\d{4}[ -]?){3}\\d{4}\\b" },
+      { type: "password", pattern: "password|senha|secret|token" }
+    ]
+  }
+  
+  // Integração com agentes
+  agent_integrations {
+    // Integração com o Validador
+    integration ValidatorAgent {
+      agent_id: "validator_llm"
+      interaction_types: ["validation_request", "compliance_verification"]
+      input_mapping: {
+        "content" : "content_to_validate",
+        "context" : "validation_context"
+      }
+      output_mapping: {
+        "validation_result" : "compliance_result",
+        "validation_details" : "compliance_details"
+      }
+    }
+    
+    // Integração com o Companheiro Institucional
+    integration CompanionAgent {
+      agent_id: "companheiro_institucional"
+      interaction_types: ["censorship_request", "information_risk_assessment"]
+      input_mapping: {
+        "query" : "content_to_censor",
+        "context" : "censorship_context"
+      }
+      output_mapping: {
+        "censored_response" : "filtered_response",
+        "filtering_metadata" : "censorship_metadata"
+      }
+    }
+  }
+  
+  // Memória institucional
+  institutional_memory {
+    embeddings_index: "censorship_knowledge"
+    update_frequency: "daily"
+    memory_types: ["compliance_rules", "sensitive_patterns", "regulatory_requirements"]
+    memory_access: "read_only"
+    historical_reference: true
+  }
+  
+  // Spans para filtragem e censura
+  span CensorshipFilter {
+    id: "censorship-filter-${timestamp}"
+    type: "censorship_operation"
+    timestamp: "${current_time}"
+    actors: ["censor_llm"]
+    fields: [
+      { name: "operation_type", value: "filter" },
+      { name: "sensitivity_level", value: "${sensitivity_level}" },
+      { name: "filter_categories", value: "${categories}" },
+      { name: "status", value: "processing" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "redactions", value: "${redaction_count}" },
+        { name: "compliance_status", value: "${compliance_status}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Span para verificação de compliance
+  span ComplianceCheck {
+    id: "compliance-check-${timestamp}"
+    type: "compliance_operation"
+    timestamp: "${current_time}"
+    actors: ["censor_llm"]
+    fields: [
+      { name: "operation_type", value: "compliance_verification" },
+      { name: "policies", value: "${policies}" },
+      { name: "jurisdiction", value: "${jurisdiction}" },
+      { name: "status", value: "processing" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "compliant", value: "${compliant}" },
+        { name: "violations_count", value: "${violations_count}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Span para redação de privacidade
+  span PrivacyRedaction {
+    id: "privacy-redaction-${timestamp}"
+    type: "privacy_operation"
+    timestamp: "${current_time}"
+    actors: ["censor_llm"]
+    fields: [
+      { name: "operation_type", value: "pii_redaction" },
+      { name: "redaction_level", value: "${redaction_level}" },
+      { name: "status", value: "processing" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "redaction_count", value: "${redaction_count}" },
+        { name: "metadata", value: "${metadata_json}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Span de assinatura do agente
+  span AgentSignature {
+    id: "censor-signature-${timestamp}"
+    type: "agent_signature"
+    timestamp: "${current_time}"
+    actors: ["censor_llm", "LogLine Engineering Team"]
+    fields: [
+      { name: "agent_id", value: "censor_llm" },
+      { name: "agent_name", value: "Censor Institucional" },
+      { name: "agent_version", value: "1.0.0" },
+      { name: "signature_type", value: "institutional_contract" }
+    ]
+  }
+}

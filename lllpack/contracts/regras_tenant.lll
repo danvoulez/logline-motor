@@ -1,0 +1,195 @@
+// Regras Institucionais para Tenants
+// Contrato que estabelece direitos, deveres e limites para tenants
+// --------------------------------------------------------------
+
+contract RegrasTenant {
+  title: "Regras Institucionais para Tenants"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-03"
+  tags: ["governance", "tenant", "rules", "institutional", "rights"]
+  
+  // Definições e Conceitos
+  definitions {
+    term Tenant {
+      description: "Entidade institucional que habita e opera dentro do sistema LogLine, com identidade própria e recursos alocados."
+    }
+    
+    term Recurso {
+      description: "Qualquer elemento do sistema que pode ser alocado, consumido ou utilizado, incluindo ciclos computacionais, armazenamento, spans, contratos e agentes."
+    }
+    
+    term Cota {
+      description: "Limite quantitativo de recursos que um tenant pode utilizar em determinado período."
+    }
+  }
+  
+  // Artigos Fundamentais
+  
+  // Artigo 1 - Identidade e Soberania
+  article IdentidadeSoberania {
+    clause 1.1 {
+      text: "Todo tenant possui identidade soberana, manifestada por seu identificador único, chaves criptográficas próprias e timeline isolada."
+    }
+    
+    clause 1.2 {
+      text: "A identidade do tenant é imutável durante seu ciclo de vida e deve ser verificável através de assinaturas criptográficas em todas as suas operações."
+    }
+    
+    clause 1.3 {
+      text: "Cada tenant tem direito à confidencialidade de seus dados, isolamento de recursos e não-interferência por parte de outros tenants."
+    }
+  }
+  
+  // Artigo 2 - Recursos e Cotas
+  article RecursosECotas {
+    clause 2.1 {
+      text: "Todo tenant possui cotas de recursos claramente definidas, incluindo ciclos de CPU, armazenamento, memória, spans por minuto e chamadas de API."
+    }
+    
+    clause 2.2 {
+      text: "As cotas são aplicadas pelo sistema de forma automática e transparente, com notificações aos tenants quando atingirem 80% e 95% de seu limite."
+    }
+    
+    clause 2.3 {
+      text: "O sistema deve garantir isolamento justo de recursos, impedindo que tenants consumam recursos além de suas cotas ou interfiram no desempenho de outros tenants."
+    }
+    
+    clause 2.4 {
+      text: "Em caso de escassez crítica de recursos, o sistema aplicará redução proporcional de recursos a todos os tenants, preservando a operação dos spans críticos."
+    }
+  }
+  
+  // Artigo 3 - Timeline e Spans
+  article TimelineESpans {
+    clause 3.1 {
+      text: "Cada tenant possui sua própria timeline, onde todos seus spans são registrados de forma imutável e cronologicamente ordenada."
+    }
+    
+    clause 3.2 {
+      text: "Os spans de um tenant devem ser assinados com suas chaves criptográficas para garantir autenticidade e não-repúdio."
+    }
+    
+    clause 3.3 {
+      text: "O sistema mantém hash de causalidade entre spans, garantindo integridade e sequenciamento correto da timeline."
+    }
+    
+    clause 3.4 {
+      text: "Tenants podem definir políticas de retenção para sua timeline, mas um registro mínimo de spans críticos será sempre preservado pelo sistema."
+    }
+  }
+  
+  // Artigo 4 - Agentes
+  article Agentes {
+    clause 4.1 {
+      text: "Tenants podem criar e manter seus próprios agentes LLM, com capacidades, personalidade e acesso definidos por contrato."
+    }
+    
+    clause 4.2 {
+      text: "Os agentes são restritos ao escopo de recursos e dados do tenant que os criou, não podendo acessar ou modificar recursos de outros tenants."
+    }
+    
+    clause 4.3 {
+      text: "Agentes institucionais primários podem interagir entre tenants apenas mediante consentimento explícito e auditável de ambas as partes."
+    }
+    
+    clause 4.4 {
+      text: "O sistema garante que os agentes respeitem os contratos e limites estabelecidos, invalidando operações que violem estas restrições."
+    }
+  }
+  
+  // Artigo 5 - Contratos e Governança
+  article ContratosEGovernanca {
+    clause 5.1 {
+      text: "Cada tenant pode estabelecer seus próprios contratos internos, desde que não contradigam os princípios fundamentais do sistema LogLine."
+    }
+    
+    clause 5.2 {
+      text: "Alterações nos contratos devem seguir procedimento formal de proposta, revisão e aprovação, registrado como spans na timeline."
+    }
+    
+    clause 5.3 {
+      text: "Disputas entre tenants serão resolvidas por mecanismo arbitral baseado em evidências da timeline e contrato constitucional do sistema."
+    }
+  }
+  
+  // Artigo 6 - Segurança e Auditoria
+  article SegurancaEAuditoria {
+    clause 6.1 {
+      text: "O sistema deve garantir isolamento de segurança entre tenants, impedindo acesso não autorizado a dados e recursos."
+    }
+    
+    clause 6.2 {
+      text: "Todas as operações de administração, alocação de recursos e modificação de cotas devem ser registradas como spans auditáveis na timeline do sistema."
+    }
+    
+    clause 6.3 {
+      text: "Tenants têm direito a relatórios periódicos de segurança, uso de recursos e anomalias detectadas."
+    }
+  }
+  
+  // Tabela de Cotas Padrão
+  resource_quotas {
+    standard_tenant: {
+      cpu_seconds_per_minute: 30,
+      storage_gb: 10,
+      memory_gb: 4,
+      spans_per_minute: 1000,
+      api_calls_per_minute: 100,
+      embeddings_gb: 2,
+      agents_count: 5
+    },
+    
+    premium_tenant: {
+      cpu_seconds_per_minute: 60,
+      storage_gb: 50,
+      memory_gb: 16,
+      spans_per_minute: 10000,
+      api_calls_per_minute: 1000,
+      embeddings_gb: 10,
+      agents_count: 20
+    },
+    
+    internal_tenant: {
+      cpu_seconds_per_minute: "unlimited",
+      storage_gb: "unlimited",
+      memory_gb: "unlimited",
+      spans_per_minute: "unlimited",
+      api_calls_per_minute: "unlimited",
+      embeddings_gb: "unlimited",
+      agents_count: "unlimited"
+    }
+  }
+  
+  // Políticas de Escalação
+  escalation_policies {
+    // Política para violações de cota
+    quota_violation: {
+      warning_at_percent: 80,
+      critical_at_percent: 95,
+      action_at_100_percent: "throttle",
+      grace_period_minutes: 5,
+      notification_channels: ["admin_span", "log", "email"]
+    },
+    
+    // Política para violações de segurança
+    security_violation: {
+      severity_levels: ["info", "warning", "critical"],
+      action_critical: "suspend",
+      notification_channels: ["admin_span", "log", "email", "alert"]
+    }
+  }
+  
+  // Span de assinatura do contrato
+  span ContractSignature {
+    id: "tenant-rules-signature-${timestamp}"
+    type: "contract_signature"
+    timestamp: "${current_time}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "contract_name", value: "RegrasTenant" },
+      { name: "version", value: "1.0.0" },
+      { name: "hash", value: "${content_hash}" }
+    ]
+  }
+}

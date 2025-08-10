@@ -1,0 +1,17 @@
+[package]
+name = "cli"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "CLI unificado para interagir com o LogLine Motor e serviços"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+anyhow       = "1.0"
+clap         = { version = "4.0", features = ["derive"] }
+serde        = { version = "1.0", features = ["derive"] }
+serde_json   = "1.0"
+reqwest      = { version = "0.11", features = ["json", "stream"] }
+tokio        = { version = "1", features = ["rt-multi-thread", "macros"] }
+futures      = "0.3"

@@ -1,0 +1,52 @@
+{
+  "type": "deployment.registry",
+  "id": "c14d2e7a-b8a6-45f2-a5d1-9fc26c8c7e54",
+  "timestamp": "2025-08-03T19:57:25Z",
+  "institutional": true,
+  "package": {
+    "name": "institutional-deployment-orchestrator",
+    "version": "1.0.0",
+    "repository": "danvoulez/lllpack",
+    "tag": "v1.0.0",
+    "registry_authority": "voulezvous.tv"
+  },
+  "capabilities": [
+    "deployment.orchestration",
+    "wasm.plugin.execution",
+    "timeline.span.emission",
+    "contract.governance",
+    "api.http.server"
+  ],
+  "dependencies": {
+    "logline-core": ">=2.0.0",
+    "timeline": ">=1.5.0",
+    "wasm-sandbox": ">=1.0.0"
+  },
+  "contracts": [
+    {
+      "name": "deployment.initiation",
+      "required": true,
+      "version": "1.0"
+    },
+    {
+      "name": "deployment.phase",
+      "required": true,
+      "version": "1.0"
+    },
+    {
+      "name": "deployment.completion",
+      "required": true,
+      "version": "1.0"
+    },
+    {
+      "name": "deployment.rollback",
+      "required": true,
+      "version": "1.0"
+    }
+  ],
+  "security": {
+    "signature": "ed25519:8a7f4e2c09b5d31a6f28e7c4d5b29a07c6f3d8e1a2b5c4d7e9f8a2b5c4d7e9f8",
+    "certification": "voulezvous.ai",
+    "timestamp": "2025-08-03T19:57:25Z"
+  }
+}

@@ -1,0 +1,80 @@
+# LogLine Institutional Package (lllpack)
+# Container institucional completo, reversível e auditável
+# ------------------------------------------------------
+
+# Metadados do pacote
+name: "logline-core-institutional"
+version: "1.0.0"
+description: "LogLine Container Institucional - Sistema Completo de Governança por Spans"
+created_at: "2025-08-03T16:38:00+01:00"
+hash: "sha256:e8dc057914e61a165aabb5fae5c4c58a451474a31f00c5926c2e5cdd9c4658ad"
+verifiable: true
+signed: true
+
+# Autores e identidade institucional
+authors:
+  - name: "LogLine Engineering Team"
+    role: "Core Developer"
+    key_id: "LLL2025080300001"
+  - name: "Companheiro Institucional"
+    role: "Agent Observer"
+    key_id: "LLL2025080300002"
+
+# Configuração de runtime
+runtime:
+  vm: "logline_vm"
+  version: "1.0.0"
+  plugins:
+    - "validator.wasm"
+    - "span_merger.wasm"
+    - "trigger_cron.wasm"
+  memory_limit_mb: 512
+  timeout_seconds: 300
+  security:
+    allow_filesystem: true
+    allow_network: false
+    allow_process: false
+
+# Entrypoint e boot sequence
+entrypoint: "spans/boot_sequence.lll"
+timeline: "timeline/main.timeline"
+
+# Contratos fundamentais
+contracts:
+  - "contracts/constituicao.lll"
+  - "contracts/onboarding.lll"
+  - "contracts/regras_tenant.lll"
+
+# Agentes integrados
+agents:
+  - "agents/companheiro_institucional.lll"
+  - "agents/validator_llm.lll"
+  - "agents/censor_llm.lll"
+
+# Sequência de boot e spans iniciais
+boot_sequence:
+  - span: "InitializeTimeline"
+    type: "boot"
+  - span: "LoadContracts"
+    type: "contract_load"
+  - span: "ActivateAgents"
+    type: "agent_init"
+  - span: "ConnectEmbeddings"
+    type: "embed_load"
+  - span: "RunDiagnostic"
+    type: "diagnostic"
+
+# Triggers automáticos
+triggers:
+  - name: "daily_maintenance"
+    cron: "0 4 * * *"
+    file: "triggers/cron.daily.lll"
+  - name: "file_watcher"
+    event: "file_change"
+    file: "triggers/file_watch.lll"
+
+# Verificação e assinatura
+verification:
+  public_key: "keys/public.pem"
+  signature: "keys/signature.sig"
+  algorithm: "ed25519"

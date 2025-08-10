@@ -1,0 +1,679 @@
+// LogLine Infrastructure Deployment Contract
+// Contrato de orquestração de deployment de infraestrutura
+// --------------------------------------------------------------
+
+contract DeploymentOrchestrator {
+  title: "Orquestrador de Deployment Institucional"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-05"
+  tags: ["deployment", "infrastructure", "orchestration", "pipeline", "institutional"]
+  
+  // Definições e Conceitos
+  definitions {
+    term DeploymentPipeline {
+      description: "Sequência de etapas orquestradas pelo LogLine para deployment completo de aplicações e infraestrutura."
+    }
+    
+    term AtomicDeployment {
+      description: "Modelo de deployment em que todas as etapas são registradas como spans na timeline institucional, garantindo rastreabilidade e reversibilidade completas."
+    }
+    
+    term RollbackAutomático {
+      description: "Mecanismo que detecta falhas em qualquer etapa do deployment e automaticamente reverte todas as operações realizadas, restaurando o estado anterior."
+    }
+    
+    term ObservabilidadeInstitucional {
+      description: "Capacidade de visualizar, compreender e auditar todas as operações de deployment através de spans e timeline."
+    }
+  }
+  
+  // Configuração do Pipeline de Deployment
+  pipeline_config {
+    // Fases do pipeline
+    phases: [
+      {
+        name: "preparation",
+        description: "Preparação e validação do ambiente para deployment",
+        required: true,
+        timeout_seconds: 300,
+        retry_strategy: {
+          max_retries: 3,
+          delay_seconds: 30
+        }
+      },
+      {
+        name: "resource_provisioning",
+        description: "Provisionamento de recursos de infraestrutura",
+        required: true,
+        timeout_seconds: 1800,
+        retry_strategy: {
+          max_retries: 2,
+          delay_seconds: 60
+        }
+      },
+      {
+        name: "artifact_deployment",
+        description: "Deployment dos artefatos de aplicação",
+        required: true,
+        timeout_seconds: 900,
+        retry_strategy: {
+          max_retries: 3,
+          delay_seconds: 45
+        }
+      },
+      {
+        name: "configuration",
+        description: "Configuração de componentes e serviços",
+        required: true,
+        timeout_seconds: 600,
+        retry_strategy: {
+          max_retries: 3,
+          delay_seconds: 30
+        }
+      },
+      {
+        name: "integration",
+        description: "Integração com outros sistemas e serviços",
+        required: false,
+        timeout_seconds: 600,
+        retry_strategy: {
+          max_retries: 2,
+          delay_seconds: 45
+        }
+      },
+      {
+        name: "validation",
+        description: "Validação do deployment completo",
+        required: true,
+        timeout_seconds: 600,
+        retry_strategy: {
+          max_retries: 1,
+          delay_seconds: 30
+        }
+      },
+      {
+        name: "cutover",
+        description: "Transição do tráfego para a nova versão",
+        required: true,
+        timeout_seconds: 300,
+        retry_strategy: {
+          max_retries: 1,
+          delay_seconds: 15
+        }
+      },
+      {
+        name: "post_deployment",
+        description: "Operações pós-deployment (limpeza, notificações)",
+        required: false,
+        timeout_seconds: 300,
+        retry_strategy: {
+          max_retries: 2,
+          delay_seconds: 30
+        }
+      }
+    ],
+    
+    // Estratégias de deployment
+    strategies: [
+      {
+        name: "blue_green",
+        description: "Deployment com dois ambientes paralelos e troca instantânea",
+        phases: ["preparation", "resource_provisioning", "artifact_deployment", "configuration", "validation", "cutover", "post_deployment"],
+        rollback_strategy: "instance_swap"
+      },
+      {
+        name: "canary",
+        description: "Deployment gradual com roteamento parcial de tráfego",
+        phases: ["preparation", "resource_provisioning", "artifact_deployment", "configuration", "validation", "cutover", "post_deployment"],
+        additional_phases: ["traffic_shift_10", "traffic_shift_50", "traffic_shift_100"],
+        rollback_strategy: "traffic_revert"
+      },
+      {
+        name: "in_place",
+        description: "Atualização direta dos recursos existentes",
+        phases: ["preparation", "artifact_deployment", "configuration", "validation", "post_deployment"],
+        rollback_strategy: "version_rollback"
+      },
+      {
+        name: "recreate",
+        description: "Destruir e recriar todos os recursos",
+        phases: ["preparation", "resource_provisioning", "artifact_deployment", "configuration", "validation", "post_deployment"],
+        rollback_strategy: "full_restore"
+      }
+    ],
+    
+    // Regras de validação
+    validation_rules: [
+      {
+        name: "health_check",
+        description: "Verificação de saúde dos endpoints da aplicação",
+        type: "http",
+        parameters: {
+          endpoints: ["health", "readiness", "liveness"],
+          success_status: [200, 204],
+          timeout_seconds: 30,
+          retries: 5
+        },
+        required: true
+      },
+      {
+        name: "smoke_test",
+        description: "Testes básicos de funcionalidade",
+        type: "script",
+        parameters: {
+          script_path: "tests/smoke.sh",
+          timeout_seconds: 180,
+          success_exit_codes: [0]
+        },
+        required: true
+      },
+      {
+        name: "resource_validation",
+        description: "Validação dos recursos provisionados",
+        type: "plugin",
+        parameters: {
+          plugin_name: "infra_plugin",
+          function: "validate_resources",
+          timeout_seconds: 120
+        },
+        required: true
+      },
+      {
+        name: "performance_check",
+        description: "Verificação básica de performance",
+        type: "benchmark",
+        parameters: {
+          benchmark_script: "tests/perf_check.sh",
+          thresholds: {
+            response_time_ms: 500,
+            requests_per_second: 100
+          },
+          timeout_seconds: 300
+        },
+        required: false
+      }
+    ],
+    
+    // Políticas de rollback
+    rollback_policies: [
+      {
+        name: "automatic_on_failure",
+        description: "Rollback automático em caso de falha em fase crítica",
+        trigger: "phase_failure",
+        applies_to_phases: ["artifact_deployment", "configuration", "cutover"],
+        notification: true
+      },
+      {
+        name: "automatic_on_validation",
+        description: "Rollback automático se validação falhar",
+        trigger: "validation_failure",
+        applies_to_rules: ["health_check", "smoke_test"],
+        notification: true
+      },
+      {
+        name: "automatic_on_timeout",
+        description: "Rollback automático se deployment exceder timeout",
+        trigger: "timeout",
+        timeout_seconds: 3600,
+        notification: true
+      },
+      {
+        name: "manual_approval_required",
+        description: "Rollback requer aprovação manual em ambientes de produção",
+        trigger: "manual",
+        applies_to_environments: ["prod"],
+        approval_roles: ["deployment_manager", "ops_lead"],
+        timeout_seconds: 1800
+      }
+    ]
+  }
+  
+  // Integração com WASM Plugin
+  plugin_integration {
+    plugin_id: "infra_plugin",
+    version_constraint: ">=1.0.0",
+    required_capabilities: ["deployment", "infrastructure"],
+    initialization_parameters: {
+      timeline_access: true,
+      sandbox_level: "standard",
+      log_level: "info"
+    },
+    function_mappings: [
+      {
+        contract_function: "deploy",
+        plugin_function: "deploy",
+        parameter_mapping: {
+          "deployment_plan": "plan",
+          "environment": "env",
+          "options": "opts"
+        }
+      },
+      {
+        contract_function: "provision_resources",
+        plugin_function: "provision_resources",
+        parameter_mapping: {
+          "resource_spec": "spec",
+          "region": "region",
+          "options": "opts"
+        }
+      },
+      {
+        contract_function: "rollback_deployment",
+        plugin_function: "rollback",
+        parameter_mapping: {
+          "deployment_id": "deployment_id",
+          "step": "step",
+          "options": "opts"
+        }
+      }
+    ]
+  }
+  
+  // Spans para deployment
+  span DeploymentInitiation {
+    id: "deployment-initiation-${timestamp}"
+    type: "deployment_operation"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "${initiator}"]
+    fields: [
+      { name: "operation", value: "initiate_deployment" },
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "environment", value: "${environment}" },
+      { name: "strategy", value: "${strategy}" },
+      { name: "version", value: "${version}" },
+      { name: "status", value: "initiated" }
+    ]
+  }
+  
+  // Span para fase de preparação
+  span PreparationPhase {
+    id: "preparation-phase-${timestamp}"
+    type: "deployment_phase"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator"]
+    parent_id: "deployment-initiation-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "phase", value: "preparation" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 300  // 5 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "validation_result", value: "${validation_result}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "action", value: "${failure_action}" }
+      ]
+    }
+  }
+  
+  // Span para provisionamento de recursos
+  span ResourceProvisioningPhase {
+    id: "resource-provisioning-${timestamp}"
+    type: "deployment_phase"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "infra_plugin"]
+    parent_id: "preparation-phase-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "phase", value: "resource_provisioning" },
+      { name: "resources", value: "${resources_json}" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 1800  // 30 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "provisioned_resources", value: "${provisioned_resources}" },
+        { name: "resources_metadata", value: "${resources_metadata}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "action", value: "rollback" }
+      ]
+    }
+  }
+  
+  // Span para deployment de artefatos
+  span ArtifactDeploymentPhase {
+    id: "artifact-deployment-${timestamp}"
+    type: "deployment_phase"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "infra_plugin"]
+    parent_id: "resource-provisioning-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "phase", value: "artifact_deployment" },
+      { name: "artifacts", value: "${artifacts_json}" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 900  // 15 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "deployed_artifacts", value: "${deployed_artifacts}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "action", value: "rollback" }
+      ]
+    }
+  }
+  
+  // Span para configuração
+  span ConfigurationPhase {
+    id: "configuration-phase-${timestamp}"
+    type: "deployment_phase"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "infra_plugin"]
+    parent_id: "artifact-deployment-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "phase", value: "configuration" },
+      { name: "config_files", value: "${config_files_json}" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 600  // 10 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "applied_configurations", value: "${applied_configurations}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "action", value: "rollback" }
+      ]
+    }
+  }
+  
+  // Span para validação
+  span ValidationPhase {
+    id: "validation-phase-${timestamp}"
+    type: "deployment_phase"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "infra_plugin"]
+    parent_id: "configuration-phase-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "phase", value: "validation" },
+      { name: "validations", value: "${validations_json}" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 600  // 10 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "validation_results", value: "${validation_results}" },
+        { name: "health_status", value: "${health_status}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "action", value: "rollback" }
+      ]
+    }
+  }
+  
+  // Span para cutover
+  span CutoverPhase {
+    id: "cutover-phase-${timestamp}"
+    type: "deployment_phase"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "infra_plugin"]
+    parent_id: "validation-phase-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "phase", value: "cutover" },
+      { name: "routing_updates", value: "${routing_updates_json}" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 300  // 5 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "traffic_percentage", value: "100" },
+        { name: "cutover_time", value: "${cutover_timestamp}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "action", value: "rollback" }
+      ]
+    }
+  }
+  
+  // Span para conclusão de deployment
+  span DeploymentCompletion {
+    id: "deployment-completion-${timestamp}"
+    type: "deployment_operation"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator"]
+    parent_id: "cutover-phase-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "operation", value: "complete_deployment" },
+      { name: "status", value: "completed" },
+      { name: "start_time", value: "${start_time}" },
+      { name: "end_time", value: "${current_time}" },
+      { name: "duration_seconds", value: "${duration}" },
+      { name: "deployment_report", value: "${report_url}" }
+    ]
+  }
+  
+  // Span para rollback de deployment
+  span DeploymentRollback {
+    id: "deployment-rollback-${timestamp}"
+    type: "deployment_operation"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator", "${initiator}"]
+    parent_id: "deployment-initiation-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "operation", value: "rollback_deployment" },
+      { name: "reason", value: "${rollback_reason}" },
+      { name: "failing_phase", value: "${failing_phase}" },
+      { name: "status", value: "initiated" }
+    ]
+    children: [
+      "RollbackCutover",
+      "RollbackConfiguration",
+      "RollbackArtifacts",
+      "RollbackResources"
+    ]
+  }
+  
+  // Span para verificação de rollback
+  span RollbackVerification {
+    id: "rollback-verification-${timestamp}"
+    type: "deployment_operation"
+    timestamp: "${current_time}"
+    actors: ["deployment_orchestrator"]
+    parent_id: "deployment-rollback-${timestamp}"
+    fields: [
+      { name: "deployment_id", value: "${deployment_id}" },
+      { name: "operation", value: "verify_rollback" },
+      { name: "status", value: "in_progress" }
+    ]
+    timeouts: {
+      execution: 600  // 10 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "verification_result", value: "${verification_result}" },
+        { name: "restored_version", value: "${restored_version}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" },
+        { name: "manual_intervention_required", value: "true" }
+      ]
+    }
+  }
+  
+  // Eventos de observabilidade
+  observability_events {
+    // Métricas de deployment
+    metrics: [
+      {
+        name: "deployment_duration",
+        description: "Duração total do deployment em segundos",
+        type: "gauge",
+        labels: ["deployment_id", "environment", "strategy"]
+      },
+      {
+        name: "deployment_success_rate",
+        description: "Taxa de sucesso de deployments",
+        type: "counter",
+        labels: ["environment", "strategy"]
+      },
+      {
+        name: "phase_duration",
+        description: "Duração de cada fase do deployment",
+        type: "gauge",
+        labels: ["deployment_id", "phase", "environment"]
+      },
+      {
+        name: "rollback_count",
+        description: "Contagem de rollbacks realizados",
+        type: "counter",
+        labels: ["environment", "failing_phase"]
+      }
+    ],
+    
+    // Alertas
+    alerts: [
+      {
+        name: "deployment_failed",
+        description: "Alerta quando um deployment falha",
+        severity: "critical",
+        condition: "span.status == 'failed' && span.type == 'deployment_operation'",
+        channels: ["slack", "email", "timeline"]
+      },
+      {
+        name: "deployment_timeout",
+        description: "Alerta quando um deployment excede o tempo limite",
+        severity: "high",
+        condition: "span.error contains 'timeout' && span.type == 'deployment_phase'",
+        channels: ["slack", "timeline"]
+      },
+      {
+        name: "rollback_failed",
+        description: "Alerta crítico quando um rollback falha",
+        severity: "critical",
+        condition: "span.status == 'failed' && span.type == 'deployment_operation' && span.operation == 'rollback_deployment'",
+        channels: ["slack", "email", "timeline", "pager"]
+      }
+    ]
+  }
+  
+  // API HTTP /deploy
+  http_api {
+    base_path: "/deploy",
+    endpoints: [
+      {
+        path: "/",
+        method: "POST",
+        description: "Inicia um novo deployment",
+        request_schema: "DeploymentRequest",
+        response_schema: "DeploymentResponse",
+        required_roles: ["deployer", "admin"],
+        rate_limit: "10/minute"
+      },
+      {
+        path: "/:id",
+        method: "GET",
+        description: "Consulta status de um deployment",
+        response_schema: "DeploymentStatusResponse",
+        required_roles: ["viewer", "deployer", "admin"],
+        rate_limit: "60/minute"
+      },
+      {
+        path: "/:id/rollback",
+        method: "POST",
+        description: "Inicia rollback de um deployment",
+        request_schema: "RollbackRequest",
+        response_schema: "RollbackResponse",
+        required_roles: ["deployer", "admin"],
+        rate_limit: "5/minute"
+      },
+      {
+        path: "/history",
+        method: "GET",
+        description: "Lista histórico de deployments",
+        response_schema: "DeploymentHistoryResponse",
+        required_roles: ["viewer", "deployer", "admin"],
+        rate_limit: "30/minute"
+      }
+    ],
+    schemas: {
+      DeploymentRequest: {
+        type: "object",
+        required: ["environment", "version", "strategy"],
+        properties: {
+          environment: { type: "string" },
+          version: { type: "string" },
+          strategy: { type: "string" },
+          artifacts: { type: "array" },
+          options: { type: "object" }
+        }
+      },
+      RollbackRequest: {
+        type: "object",
+        required: ["reason"],
+        properties: {
+          reason: { type: "string" },
+          target_version: { type: "string" },
+          options: { type: "object" }
+        }
+      }
+    }
+  }
+  
+  // Span de assinatura do contrato
+  span ContractSignature {
+    id: "deployment-contract-signature-${timestamp}"
+    type: "contract_signature"
+    timestamp: "${current_time}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "contract_name", value: "DeploymentOrchestrator" },
+      { name: "contract_version", value: "1.0.0" },
+      { name: "signature_type", value: "institutional_contract" }
+    ]
+  }
+}

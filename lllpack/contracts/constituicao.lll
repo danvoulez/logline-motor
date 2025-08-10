@@ -1,0 +1,124 @@
+// Constituição Institucional LogLine
+// Contrato fundamental para governança e soberania
+// -------------------------------------------------
+
+contract Constituicao {
+  title: "Constituição Institucional LogLine"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-03"
+  tags: ["institucional", "governance", "sovereign", "lllpack", "core"]
+  
+  // Preâmbulo
+  preambulo {
+    descricao: "Esta Constituição estabelece os princípios e regras fundamentais para qualquer entidade institucional hospedada no LogLineOS, garantindo soberania, rastreabilidade e reversibilidade em todas as operações."
+  }
+  
+  // Princípios Fundamentais
+  principios {
+    // Soberania de spans - todos os atos institucionais são spans rastreáveis
+    soberania_spans {
+      artigo: "1",
+      texto: "Toda operação dentro do regime institucional deve ser emitida como um span rastreável, assinado e verificável, constituindo a unidade fundamental de ação institucional."
+    }
+    
+    // Reversibilidade como direito - todas as operações podem ser revertidas via timeline
+    reversibilidade {
+      artigo: "2",
+      texto: "É direito fundamental de qualquer instituição no LogLineOS a capacidade de reverter qualquer operação através da timeline, mantendo um registro imutável mas permitindo correção de estados."
+    }
+    
+    // Governança por contrato - todas as regras são explícitas e versionadas
+    governanca_contratual {
+      artigo: "3",
+      texto: "Toda lógica institucional deve ser declarada explicitamente via contratos .lll, com versionamento explícito, não sendo admitido comportamento não-declarado ou implícito."
+    }
+    
+    // Auditabilidade total - tudo deve ser registrado em timeline
+    auditabilidade {
+      artigo: "4",
+      texto: "Toda execução, decisão e estado deve ser registrado na timeline institucional, com hash de causalidade, garantindo que nenhuma operação ocorra fora do regime de spans."
+    }
+  }
+  
+  // Estruturas fundamentais
+  estruturas {
+    // Timeline como source of truth
+    timeline {
+      artigo: "5",
+      texto: "A timeline é a fonte única de verdade para todos os eventos e estados institucionais, com estrutura causal rigorosa."
+    }
+    
+    // Spans como unidades de execução e verificação
+    spans {
+      artigo: "6",
+      texto: "Os spans são as unidades fundamentais de execução, com metadados completos, causalidade e verificabilidade."
+    }
+    
+    // Contratos como gramática institucional
+    contratos {
+      artigo: "7",
+      texto: "Os contratos .lll definem a gramática institucional viva, sendo eles próprios objetos institucionais versionáveis."
+    }
+    
+    // Agentes como cidadãos institucionais
+    agentes {
+      artigo: "8",
+      texto: "Os agentes LLM são cidadãos institucionais com capacidade declarada por contrato de observar, propor e executar spans sob regime constitucional."
+    }
+  }
+  
+  // Direitos e garantias das entidades
+  direitos {
+    // Pessoas
+    pessoas {
+      artigo: "9",
+      texto: "Toda pessoa representada no sistema tem direito à identidade soberana, à reversão de operações e à auditoria de ações que afetem seus recursos."
+    }
+    
+    // Ideias
+    ideias {
+      artigo: "10",
+      texto: "Toda ideia tem direito a registro como um span de tipo 'idea', com autoria, timestamping e causalidade garantidos."
+    }
+    
+    // Objetos
+    objetos {
+      artigo: "11",
+      texto: "Todo objeto institucional tem direito a um histórico de spans completo, recuperável e auditável."
+    }
+    
+    // Contratos
+    contrato_direitos {
+      artigo: "12",
+      texto: "Todo contrato tem direito a versionamento explícito, execução conforme suas cláusulas e validação contínua."
+    }
+  }
+  
+  // Procedimentos de emenda e evolução
+  emendas {
+    artigo: "13",
+    texto: "Toda alteração constitucional deve gerar um span de tipo 'constitutional_amendment', com hash de causalidade ligando à versão anterior e validação por pelo menos dois agentes institucionais."
+  }
+  
+  // Execução e responsabilidade
+  execucao {
+    artigo: "14",
+    texto: "A timeline garante que toda execução seja rastreável ao span que a iniciou e ao contrato que a legitimou, estabelecendo responsabilidade clara e auditável."
+  }
+  
+  // Assinaturas institucionais
+  assinaturas {
+    // Assinatura da Constituição
+    span ConstitutionalSignature {
+      type: "constitution_signature"
+      timestamp: "${current_time}"
+      hash: "${content_hash}"
+      actors: ["LogLine Engineering Team", "Companheiro Institucional"]
+      fields: [
+        { name: "version", value: "1.0.0" },
+        { name: "status", value: "enacted" }
+      ]
+    }
+  }
+}

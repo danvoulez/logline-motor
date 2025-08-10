@@ -1,0 +1,257 @@
+{
+  "type": "span",
+  "id": "genesis-1628742354-82a43f",
+  "timestamp": "2025-08-03T16:39:14.123Z",
+  "span_type": "genesis_diamond",
+  "parent_id": null,
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["system", "logline_vm"],
+  "fields": {
+    "institution_name": "logline-core-institutional",
+    "status": "genesis",
+    "version": "1.0.0"
+  },
+  "hash": "sha256:7dc35c8e1e3cd98203a4754a84e418e6b73594f8731ef09b43daa632f139a9e6",
+  "causal_hash": null
+}
+{
+  "type": "span",
+  "id": "boot-1628742355-48e1b2",
+  "timestamp": "2025-08-03T16:39:15.056Z",
+  "span_type": "boot_institutional",
+  "parent_id": "genesis-1628742354-82a43f",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["logline_vm", "system"],
+  "fields": {
+    "lllpack_name": "logline-core-institutional",
+    "lllpack_version": "1.0.0",
+    "boot_mode": "full",
+    "status": "initializing"
+  },
+  "hash": "sha256:91c3a30a6ce3d87d2a9d5e846a66f97cc1d9a76f65d7a6d1d84f4857b3c9f2d4",
+  "causal_hash": "sha256:7dc35c8e1e3cd98203a4754a84e418e6b73594f8731ef09b43daa632f139a9e6"
+}
+{
+  "type": "span",
+  "id": "timeline-init-1628742356",
+  "timestamp": "2025-08-03T16:39:16.127Z",
+  "span_type": "timeline_initialize",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["timeline_manager"],
+  "fields": {
+    "timeline_path": "timeline/main.timeline",
+    "mode": "append",
+    "max_entries": "10000",
+    "status": "initializing"
+  },
+  "hash": "sha256:2b45e8c6a7198273e89b9ad038e20d97808e042b952e7c3113a7786291a5e878",
+  "causal_hash": "sha256:91c3a30a6ce3d87d2a9d5e846a66f97cc1d9a76f65d7a6d1d84f4857b3c9f2d4"
+}
+{
+  "type": "span",
+  "id": "timeline-init-1628742356",
+  "timestamp": "2025-08-03T16:39:17.023Z",
+  "span_type": "timeline_initialize",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["timeline_manager"],
+  "fields": {
+    "timeline_path": "timeline/main.timeline",
+    "mode": "append",
+    "max_entries": "10000",
+    "status": "initialized"
+  },
+  "hash": "sha256:3c56e8c6a7198273e89b9ad038e20d97808e042b952e7c3113a7786291a5e878",
+  "causal_hash": "sha256:2b45e8c6a7198273e89b9ad038e20d97808e042b952e7c3113a7786291a5e878"
+}
+{
+  "type": "span",
+  "id": "contracts-load-1628742358",
+  "timestamp": "2025-08-03T16:39:18.348Z",
+  "span_type": "contract_load",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["contract_manager"],
+  "fields": {
+    "contract_path": "contracts/",
+    "contracts_count": "0",
+    "validator_plugin": "validator.wasm",
+    "status": "loading"
+  },
+  "hash": "sha256:4d67f9c7a8209384e90b0ad138e21d98808e042b952e7c3113a7786291a5e879",
+  "causal_hash": "sha256:3c56e8c6a7198273e89b9ad038e20d97808e042b952e7c3113a7786291a5e878"
+}
+{
+  "type": "span",
+  "id": "contracts-load-1628742358",
+  "timestamp": "2025-08-03T16:39:19.572Z",
+  "span_type": "contract_load",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["contract_manager"],
+  "fields": {
+    "contract_path": "contracts/",
+    "contracts_count": "3",
+    "validator_plugin": "validator.wasm",
+    "status": "loaded"
+  },
+  "hash": "sha256:5e78f9c7a8209384e90b0ad138e21d98808e042b952e7c3113a7786291a5e879",
+  "causal_hash": "sha256:4d67f9c7a8209384e90b0ad138e21d98808e042b952e7c3113a7786291a5e879"
+}
+{
+  "type": "span",
+  "id": "agents-activate-1628742360",
+  "timestamp": "2025-08-03T16:39:20.246Z",
+  "span_type": "agent_initialize",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["agent_manager"],
+  "fields": {
+    "agent_path": "agents/",
+    "primary_agent": "companheiro_institucional.lll",
+    "status": "activating"
+  },
+  "hash": "sha256:6f89a0d8b9310495fa1c1be249f32e09919f153c063d24cafaba0728fc2f8e7a",
+  "causal_hash": "sha256:5e78f9c7a8209384e90b0ad138e21d98808e042b952e7c3113a7786291a5e879"
+}
+{
+  "type": "span",
+  "id": "agents-activate-1628742360",
+  "timestamp": "2025-08-03T16:39:22.831Z",
+  "span_type": "agent_initialize",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["agent_manager"],
+  "fields": {
+    "agent_path": "agents/",
+    "primary_agent": "companheiro_institucional.lll",
+    "agents_count": "3",
+    "status": "activated"
+  },
+  "hash": "sha256:7f89a0d8b9310495fa1c1be249f32e09919f153c063d24cafaba0728fc2f8e7a",
+  "causal_hash": "sha256:6f89a0d8b9310495fa1c1be249f32e09919f153c063d24cafaba0728fc2f8e7a"
+}
+{
+  "type": "span",
+  "id": "embeddings-connect-1628742363",
+  "timestamp": "2025-08-03T16:39:23.127Z",
+  "span_type": "embed_load",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["embedding_manager"],
+  "fields": {
+    "embedding_path": "embeddings/knowledge.index",
+    "dimension": "1536",
+    "algorithm": "hnsw",
+    "status": "connecting"
+  },
+  "hash": "sha256:8a90b1e9c421506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8b",
+  "causal_hash": "sha256:7f89a0d8b9310495fa1c1be249f32e09919f153c063d24cafaba0728fc2f8e7a"
+}
+{
+  "type": "span",
+  "id": "embeddings-connect-1628742363",
+  "timestamp": "2025-08-03T16:39:24.862Z",
+  "span_type": "embed_load",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["embedding_manager"],
+  "fields": {
+    "embedding_path": "embeddings/knowledge.index",
+    "dimension": "1536",
+    "algorithm": "hnsw",
+    "vectors_count": "1254",
+    "status": "connected"
+  },
+  "hash": "sha256:9a90b1e9c421506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8b",
+  "causal_hash": "sha256:8a90b1e9c421506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8b"
+}
+{
+  "type": "span",
+  "id": "diagnostic-1628742365",
+  "timestamp": "2025-08-03T16:39:25.045Z",
+  "span_type": "diagnostic",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["diagnostic_service"],
+  "fields": {
+    "check_contracts": "true",
+    "check_timeline": "true",
+    "check_agents": "true",
+    "status": "running"
+  },
+  "hash": "sha256:0b01c2e9d532506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8c",
+  "causal_hash": "sha256:9a90b1e9c421506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8b"
+}
+{
+  "type": "span",
+  "id": "diagnostic-1628742365",
+  "timestamp": "2025-08-03T16:39:26.348Z",
+  "span_type": "diagnostic",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["diagnostic_service"],
+  "fields": {
+    "check_contracts": "true",
+    "check_timeline": "true",
+    "check_agents": "true",
+    "health_status": "healthy",
+    "issues_found": "0",
+    "status": "completed"
+  },
+  "hash": "sha256:1c01c2e9d532506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8c",
+  "causal_hash": "sha256:0b01c2e9d532506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8c"
+}
+{
+  "type": "span",
+  "id": "boot-report-1628742367",
+  "timestamp": "2025-08-03T16:39:27.127Z",
+  "span_type": "boot_report",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["system"],
+  "fields": {
+    "boot_duration_ms": "12071",
+    "contracts_loaded": "3",
+    "agents_active": "3",
+    "status": "reporting"
+  },
+  "hash": "sha256:2d12d3fa653617bc3e3de461b54f21a131b375e285e46edcbcd140ae2998b8d",
+  "causal_hash": "sha256:1c01c2e9d532506ab2d2cf350a43f10a020a264d174e35dcbcbc139fd2993b8c"
+}
+{
+  "type": "span",
+  "id": "boot-report-1628742367",
+  "timestamp": "2025-08-03T16:39:27.895Z",
+  "span_type": "boot_report",
+  "parent_id": "boot-1628742355-48e1b2",
+  "trace_id": "genesis-trace-1628742354",
+  "actors": ["system"],
+  "fields": {
+    "boot_duration_ms": "12071",
+    "contracts_loaded": "3",
+    "agents_active": "3",
+    "status": "boot_complete",
+    "timestamp_complete": "2025-08-03T16:39:27.895Z"
+  },
+  "hash": "sha256:3d12d3fa653617bc3e3de461b54f21a131b375e285e46edcbcd140ae2998b8d",
+  "causal_hash": "sha256:2d12d3fa653617bc3e3de461b54f21a131b375e285e46edcbcd140ae2998b8d"
+}
+{
+  "type": "collapse",
+  "id": "collapse-1628742367",
+  "timestamp": "2025-08-03T16:39:28.000Z",
+  "span_type": "timeline_collapse",
+  "parent_id": null,
+  "trace_id": "timeline-management-1628742367",
+  "actors": ["timeline_manager"],
+  "fields": {
+    "start_span": "genesis-1628742354-82a43f",
+    "end_span": "boot-report-1628742367",
+    "collapse_type": "boot_sequence",
+    "status": "collapsed"
+  },
+  "hash": "sha256:4e23e4fb764728cd4f4ef572c65f32b242b486ec696e9eddbcd251ae2998b8e",
+  "causal_hash": "sha256:3d12d3fa653617bc3e3de461b54f21a131b375e285e46edcbcd140ae2998b8d"
+}

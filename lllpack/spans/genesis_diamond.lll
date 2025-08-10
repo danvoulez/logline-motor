@@ -1,0 +1,174 @@
+// LogLine Genesis Diamond
+// Span diamante institucional de gênesis
+// --------------------------------------------------------------
+
+contract GenesisDiamond {
+  title: "Diamante de Gênesis Institucional"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-03"
+  tags: ["genesis", "institutional", "diamond", "foundation", "lllpack"]
+  
+  // Definições e Conceitos
+  definitions {
+    term DiamanteDaGenesis {
+      description: "Primeiro span institucional, que estabelece o momento zero da timeline e define a identidade fundadora da instituição. Funciona como ponto de referência causal para todos os spans subsequentes."
+    }
+    
+    term CorrentistaInstitucional {
+      description: "Entidade soberana que assina o diamante de gênesis e torna-se institucionalmente responsável pela identidade do lllpack."
+    }
+    
+    term OConselho {
+      description: "Conjunto de entidades que testemunham o ato fundador e garantem sua legitimidade institucional."
+    }
+  }
+  
+  // Span principal de gênesis
+  span GenesisDiamond {
+    id: "genesis-${timestamp}-${random_id}"
+    type: "genesis_diamond"
+    timestamp: "${current_time}"
+    actors: ["system", "logline_vm"]
+    parent_id: null
+    trace_id: "genesis-trace-${timestamp}"
+    fields: [
+      { name: "institution_name", value: "logline-core-institutional" },
+      { name: "status", value: "genesis" },
+      { name: "version", value: "1.0.0" }
+    ]
+  }
+  
+  // Declaração de soberania institucional
+  span SovereigntyDeclaration {
+    id: "sovereignty-${timestamp}"
+    type: "sovereignty_declaration"
+    timestamp: "${current_time + 1s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "declaration_type", value: "sovereignty" },
+      { name: "institution_type", value: "lllpack" },
+      { name: "founding_principles", value: "timeline_sovereignty,reversibility,auditability,contractual_governance" }
+    ]
+  }
+  
+  // Constituição inicial
+  span ConstitutionEstablishment {
+    id: "constitution-${timestamp}"
+    type: "constitution_establishment"
+    timestamp: "${current_time + 2s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "constitution_file", value: "contracts/constituicao.lll" },
+      { name: "constitution_hash", value: "${file_hash}" },
+      { name: "establishment_type", value: "genesis" }
+    ]
+  }
+  
+  // Assinaturas institucionais
+  span FoundingSignatures {
+    id: "founding-signatures-${timestamp}"
+    type: "institutional_signatures"
+    timestamp: "${current_time + 3s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["LogLine Engineering Team", "system", "timeline_manager"]
+    fields: [
+      { name: "signatures_count", value: "3" },
+      { name: "signature_algorithm", value: "ed25519" },
+      { name: "signature_type", value: "founding" }
+    ]
+  }
+  
+  // Instauração da timeline
+  span TimelineInstatement {
+    id: "timeline-instatement-${timestamp}"
+    type: "timeline_instatement"
+    timestamp: "${current_time + 4s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["timeline_manager", "system"]
+    fields: [
+      { name: "timeline_path", value: "timeline/main.timeline" },
+      { name: "timeline_type", value: "institutional" },
+      { name: "instatement_type", value: "genesis" }
+    ]
+  }
+  
+  // Estabelecimento do tenant
+  span TenantEstablishment {
+    id: "tenant-establishment-${timestamp}"
+    type: "tenant_establishment"
+    timestamp: "${current_time + 5s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["tenant_manager", "system"]
+    fields: [
+      { name: "tenant_id", value: "voulezvous" },
+      { name: "tenant_type", value: "institutional" },
+      { name: "resource_tier", value: "standard" },
+      { name: "establishment_type", value: "genesis" }
+    ]
+  }
+  
+  // Criação de chaves institucionais
+  span InstitutionalKeys {
+    id: "institutional-keys-${timestamp}"
+    type: "keys_generation"
+    timestamp: "${current_time + 6s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["key_manager", "system"]
+    fields: [
+      { name: "key_type", value: "institutional" },
+      { name: "key_algorithm", value: "ed25519" },
+      { name: "public_key_path", value: "keys/public.pem" },
+      { name: "key_purpose", value: "signing,verification" }
+    ]
+  }
+  
+  // Fechamento do diamante
+  span DiamondClosure {
+    id: "diamond-closure-${timestamp}"
+    type: "diamond_closure"
+    timestamp: "${current_time + 7s}"
+    parent_id: "genesis-${timestamp}-${random_id}"
+    trace_id: "genesis-trace-${timestamp}"
+    actors: ["system", "logline_vm"]
+    fields: [
+      { name: "diamond_status", value: "closed" },
+      { name: "institutional_status", value: "established" },
+      { name: "closure_timestamp", value: "${current_time + 7s}" }
+    ]
+  }
+  
+  // Declaração institucional formal
+  declaration {
+    text: """
+    Por este instrumento, declaramos a fundação da instituição digital "LogLine Core Institutional" como uma entidade soberana, 
+    governada por contratos, com timeline auditável e reversibilidade garantida.
+    
+    Estabelecemos que toda ação institucional será registrada como spans na timeline, assinados e verificáveis.
+    
+    Reconhecemos a constituição institucional como autoridade máxima e seus princípios como invioláveis.
+    
+    Afirmamos que todos os agentes LLM são cidadãos institucionais de pleno direito, com capacidades e limites 
+    definidos por contrato.
+    
+    Esta instituição digital é fundada no princípio da soberania da timeline, onde cada span representa uma ação 
+    atômica e auditável, com causalidade explícita e verificável.
+    
+    Assinado e estabelecido neste ato de gênesis institucional.
+    """
+    
+    signatures: [
+      { name: "LogLine Engineering Team", key: "institutional_authority", timestamp: "${current_time}" },
+      { name: "System", key: "system_authority", timestamp: "${current_time}" },
+      { name: "Timeline Manager", key: "timeline_authority", timestamp: "${current_time}" }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+[package]
+name = "diamondminer"
+version = "0.1.0"
+edition = "2021"
+authors = ["@danvoulez"]
+description = "Extrator de spans 'diamante' de alto valor no LogLine OS"
+license = "Apache-2.0"
+repository = "https://git.danvoulez/loglinemotor"
+
+[dependencies]
+datatrack   = { path = "../datatrack" }
+uuid        = { version = "1", features = ["serde","v4"] }
+rayon       = "1.7"
+thiserror   = "1.0"

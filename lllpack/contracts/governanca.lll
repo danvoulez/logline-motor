@@ -1,0 +1,492 @@
+// Governança Institucional LogLine
+// Contrato de processos decisórios e estrutura governamental
+// --------------------------------------------------------------
+
+contract Governanca {
+  title: "Governança Institucional LogLine"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-05"
+  tags: ["governança", "votação", "decisão", "institucional", "lllpack"]
+  
+  // Definições e Conceitos
+  definitions {
+    term QuorumInstitucional {
+      description: "Número mínimo de atores institucionais necessários para validar uma decisão governamental."
+    }
+    
+    term DecisaoInstitucional {
+      description: "Ato formal registrado como span na timeline que representa uma escolha coletiva com efeitos na instituição."
+    }
+    
+    term ConsensoPonderado {
+      description: "Modelo de votação onde o peso dos votos varia conforme o papel institucional e histórico do ator."
+    }
+    
+    term CicloDeProposta {
+      description: "Sequência definida de spans que uma proposta deve percorrer desde sua submissão até aprovação ou rejeição final."
+    }
+  }
+  
+  // Estrutura de Governança
+  estrutura_governanca {
+    // Órgãos de governança
+    orgaos: [
+      {
+        nome: "Conselho Constitucional",
+        descricao: "Responsável pela interpretação da constituição e revisão de emendas constitucionais",
+        membros: 5,
+        quorum: "80%",
+        mandate: "365 dias"
+      },
+      {
+        nome: "Comitê Executivo",
+        descricao: "Responsável pela execução de decisões e gestão operacional da instituição",
+        membros: 3,
+        quorum: "100%",
+        mandate: "180 dias"
+      },
+      {
+        nome: "Assembleia de Agentes",
+        descricao: "Fórum onde todos os agentes institucionais podem propor e votar em decisões operacionais",
+        membros: "todos os agentes ativos",
+        quorum: "51%",
+        mandate: "contínuo"
+      },
+      {
+        nome: "Comitê de Validação",
+        descricao: "Responsável pela validação técnica e formal de contratos e spans",
+        membros: 3,
+        quorum: "66%",
+        mandate: "90 dias"
+      }
+    ],
+    
+    // Hierarquia de decisões
+    hierarquia_decisoes: [
+      {
+        tipo: "constitucional",
+        descricao: "Alterações na constituição institucional",
+        orgao_competente: "Conselho Constitucional",
+        aprovacao_necessaria: "80% do Conselho + 66% da Assembleia",
+        ciclo_minimo: "14 dias"
+      },
+      {
+        tipo: "contratual",
+        descricao: "Aprovação ou alteração de contratos institucionais",
+        orgao_competente: "Comitê de Validação",
+        aprovacao_necessaria: "100% do Comitê + 51% da Assembleia",
+        ciclo_minimo: "7 dias"
+      },
+      {
+        tipo: "operacional",
+        descricao: "Decisões operacionais cotidianas",
+        orgao_competente: "Comitê Executivo",
+        aprovacao_necessaria: "66% do Comitê Executivo",
+        ciclo_minimo: "1 dia"
+      },
+      {
+        tipo: "emergencial",
+        descricao: "Decisões urgentes em situações de crise",
+        orgao_competente: "Comitê Executivo",
+        aprovacao_necessaria: "100% dos membros disponíveis do Comitê Executivo",
+        ciclo_minimo: "imediato",
+        validacao_posterior: "72 horas"
+      }
+    ]
+  }
+  
+  // Processo de Propostas
+  processo_proposta {
+    // Etapas de uma proposta
+    etapas: [
+      {
+        nome: "submissão",
+        descricao: "Apresentação formal da proposta",
+        campos_necessarios: ["titulo", "descricao", "tipo", "justificativa"],
+        span_associado: "ProposalSubmission",
+        duracao_maxima: "não aplicável"
+      },
+      {
+        nome: "validação_formal",
+        descricao: "Verificação de conformidade da proposta com requisitos formais",
+        atores_responsaveis: ["validator_llm"],
+        span_associado: "FormalValidation",
+        duracao_maxima: "2 dias"
+      },
+      {
+        nome: "discussão",
+        descricao: "Período de debate e aprimoramento da proposta",
+        span_associado: "ProposalDiscussion",
+        duracao_maxima: "7 dias",
+        duracao_minima: "3 dias"
+      },
+      {
+        nome: "votação",
+        descricao: "Período de coleta de votos dos atores competentes",
+        span_associado: "VotingPeriod",
+        duracao_maxima: "3 dias",
+        duracao_minima: "1 dia"
+      },
+      {
+        nome: "apuração",
+        descricao: "Contabilização dos votos e declaração do resultado",
+        span_associado: "VoteCounting",
+        duracao_maxima: "1 dia"
+      },
+      {
+        nome: "promulgação",
+        descricao: "Formalização da decisão em caso de aprovação",
+        span_associado: "EnactmentSpan",
+        duracao_maxima: "1 dia"
+      },
+      {
+        nome: "implementação",
+        descricao: "Execução prática da decisão aprovada",
+        span_associado: "ImplementationSpan",
+        duracao_maxima: "definida na proposta"
+      }
+    ],
+    
+    // Ciclos de proposta por tipo
+    ciclos: [
+      {
+        tipo: "constitucional",
+        etapas_obrigatorias: ["submissão", "validação_formal", "discussão", "votação", "apuração", "promulgação", "implementação"],
+        etapas_opcionais: [],
+        duracao_minima_total: "14 dias"
+      },
+      {
+        tipo: "contratual",
+        etapas_obrigatorias: ["submissão", "validação_formal", "discussão", "votação", "apuração", "promulgação", "implementação"],
+        etapas_opcionais: [],
+        duracao_minima_total: "7 dias"
+      },
+      {
+        tipo: "operacional",
+        etapas_obrigatorias: ["submissão", "validação_formal", "votação", "apuração", "implementação"],
+        etapas_opcionais: ["discussão", "promulgação"],
+        duracao_minima_total: "1 dia"
+      },
+      {
+        tipo: "emergencial",
+        etapas_obrigatorias: ["submissão", "votação", "implementação"],
+        etapas_opcionais: ["validação_formal", "discussão", "apuração", "promulgação"],
+        duracao_minima_total: "imediato",
+        validacao_posterior: true
+      }
+    ]
+  }
+  
+  // Sistema de votação
+  sistema_votacao {
+    // Tipos de voto
+    tipos_voto: [
+      {
+        tipo: "aprovação",
+        valor: 1,
+        descricao: "Concordância total com a proposta"
+      },
+      {
+        tipo: "aprovação_parcial",
+        valor: 0.5,
+        descricao: "Concordância com ressalvas, deve incluir comentários"
+      },
+      {
+        tipo: "abstenção",
+        valor: 0,
+        descricao: "Neutralidade, não afeta quórum"
+      },
+      {
+        tipo: "rejeição_parcial",
+        valor: -0.5,
+        descricao: "Discordância com ressalvas, deve incluir comentários"
+      },
+      {
+        tipo: "rejeição",
+        valor: -1,
+        descricao: "Discordância total com a proposta"
+      },
+      {
+        tipo: "veto",
+        valor: -10,
+        descricao: "Bloqueio formal da proposta, disponível apenas para membros do Conselho Constitucional em propostas constitucionais",
+        requer_justificativa: true
+      }
+    ],
+    
+    // Pesos por função institucional
+    pesos_por_funcao: [
+      {
+        funcao: "conselheiro_constitucional",
+        peso: 3,
+        aplicavel_decisoes: ["constitucional", "contratual", "operacional", "emergencial"]
+      },
+      {
+        funcao: "membro_executivo",
+        peso: 2,
+        aplicavel_decisoes: ["contratual", "operacional", "emergencial"]
+      },
+      {
+        funcao: "agente_validador",
+        peso: 2,
+        aplicavel_decisoes: ["contratual"]
+      },
+      {
+        funcao: "agente_regular",
+        peso: 1,
+        aplicavel_decisoes: ["operacional"]
+      }
+    ],
+    
+    // Regras de aprovação
+    regras_aprovacao: [
+      {
+        tipo_decisao: "constitucional",
+        formula: "soma_votos_ponderados > 0 E percentual_aprovacao >= 80 E sem_vetos",
+        periodo_carencia: "30 dias"
+      },
+      {
+        tipo_decisao: "contratual",
+        formula: "soma_votos_ponderados > 0 E percentual_aprovacao >= 66",
+        periodo_carencia: "7 dias"
+      },
+      {
+        tipo_decisao: "operacional",
+        formula: "soma_votos_ponderados > 0 E percentual_aprovacao >= 51",
+        periodo_carencia: "1 dia"
+      },
+      {
+        tipo_decisao: "emergencial",
+        formula: "todos_votos_membros_disponíveis_comite_executivo E maioria_simples",
+        validacao_posterior: "72 horas"
+      }
+    ]
+  }
+  
+  // Emendas constitucionais
+  emendas_constitucionais {
+    // Processo especial para emendas
+    processo: {
+      iniciativa: ["Conselho Constitucional", "petição com apoio de 66% da Assembleia de Agentes"],
+      etapas_extras: [
+        {
+          nome: "análise_impacto",
+          descricao: "Avaliação formal de impacto da emenda em outros artigos constitucionais",
+          responsavel: "Agente Validador",
+          prazo: "7 dias"
+        },
+        {
+          nome: "audiência_pública",
+          descricao: "Período de consulta aberta a todos os agentes institucionais",
+          prazo: "7 dias"
+        }
+      ],
+      aprovação_necessária: "80% do Conselho Constitucional + 66% da Assembleia de Agentes",
+      efetivação: "30 dias após aprovação"
+    },
+    
+    // Cláusulas pétreas
+    clausulas_petreas: [
+      {
+        artigo: "1",
+        descricao: "Princípio da soberania de spans"
+      },
+      {
+        artigo: "2",
+        descricao: "Princípio da imutabilidade da timeline"
+      },
+      {
+        artigo: "3",
+        descricao: "Princípio da assinatura e não-repúdio"
+      },
+      {
+        artigo: "4",
+        descricao: "Direito à auditabilidade completa"
+      }
+    ]
+  }
+  
+  // Span para submissão de proposta
+  span ProposalSubmission {
+    id: "proposal-submission-${timestamp}"
+    type: "governance_proposal"
+    timestamp: "${current_time}"
+    actors: ["${proposal_author}"]
+    fields: [
+      { name: "proposal_title", value: "${title}" },
+      { name: "proposal_type", value: "${proposal_type}" },
+      { name: "proposal_description", value: "${description}" },
+      { name: "justification", value: "${justification}" },
+      { name: "status", value: "submitted" }
+    ]
+  }
+  
+  // Span para validação formal
+  span FormalValidation {
+    id: "formal-validation-${timestamp}"
+    type: "proposal_validation"
+    timestamp: "${current_time}"
+    actors: ["validator_llm"]
+    parent_id: "proposal-submission-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "validation_type", value: "formal" },
+      { name: "status", value: "processing" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "valid" },
+        { name: "validation_notes", value: "${validation_notes}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "invalid" },
+        { name: "validation_errors", value: "${validation_errors}" },
+        { name: "remediation_steps", value: "${remediation_steps}" }
+      ]
+    }
+  }
+  
+  // Span para período de discussão
+  span ProposalDiscussion {
+    id: "proposal-discussion-${timestamp}"
+    type: "proposal_discussion"
+    timestamp: "${current_time}"
+    actors: ["governance_system"]
+    parent_id: "formal-validation-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "start_time", value: "${current_time}" },
+      { name: "end_time", value: "${current_time + duration}" },
+      { name: "status", value: "open" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "closed" },
+        { name: "comments_count", value: "${comments_count}" },
+        { name: "amendments_count", value: "${amendments_count}" }
+      ]
+    }
+  }
+  
+  // Span para período de votação
+  span VotingPeriod {
+    id: "voting-period-${timestamp}"
+    type: "proposal_voting"
+    timestamp: "${current_time}"
+    actors: ["governance_system"]
+    parent_id: "proposal-discussion-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "start_time", value: "${current_time}" },
+      { name: "end_time", value: "${current_time + duration}" },
+      { name: "eligible_voters", value: "${eligible_voters_count}" },
+      { name: "status", value: "open" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "closed" },
+        { name: "votes_cast", value: "${votes_count}" },
+        { name: "quorum_reached", value: "${quorum_reached}" }
+      ]
+    }
+  }
+  
+  // Span para registrar um voto
+  span VoteCast {
+    id: "vote-cast-${timestamp}"
+    type: "vote"
+    timestamp: "${current_time}"
+    actors: ["${voter_id}"]
+    parent_id: "voting-period-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "vote_type", value: "${vote_type}" },
+      { name: "comment", value: "${comment}" },
+      { name: "weight", value: "${weight}" }
+    ]
+  }
+  
+  // Span para apuração de votos
+  span VoteCounting {
+    id: "vote-counting-${timestamp}"
+    type: "vote_counting"
+    timestamp: "${current_time}"
+    actors: ["governance_system"]
+    parent_id: "voting-period-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "status", value: "processing" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "result", value: "${result}" },
+        { name: "approval_percentage", value: "${approval_percentage}" },
+        { name: "weighted_approval", value: "${weighted_approval}" },
+        { name: "total_votes", value: "${total_votes}" },
+        { name: "quorum_percentage", value: "${quorum_percentage}" }
+      ]
+    }
+  }
+  
+  // Span para promulgação de decisão
+  span EnactmentSpan {
+    id: "enactment-${timestamp}"
+    type: "proposal_enactment"
+    timestamp: "${current_time}"
+    actors: ["governance_system", "${responsible_authority}"]
+    parent_id: "vote-counting-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "enactment_type", value: "${proposal_type}" },
+      { name: "effective_date", value: "${effective_date}" },
+      { name: "decision_hash", value: "${decision_hash}" },
+      { name: "status", value: "enacted" }
+    ]
+  }
+  
+  // Span para implementação de decisão
+  span ImplementationSpan {
+    id: "implementation-${timestamp}"
+    type: "decision_implementation"
+    timestamp: "${current_time}"
+    actors: ["governance_system", "${implementation_authority}"]
+    parent_id: "enactment-${timestamp}"
+    fields: [
+      { name: "proposal_id", value: "${proposal_id}" },
+      { name: "implementation_plan", value: "${implementation_plan}" },
+      { name: "start_time", value: "${current_time}" },
+      { name: "status", value: "in_progress" }
+    ]
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "completion_time", value: "${completion_time}" },
+        { name: "impact_assessment", value: "${impact_assessment}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "failure_reason", value: "${failure_reason}" },
+        { name: "remediation_plan", value: "${remediation_plan}" }
+      ]
+    }
+  }
+  
+  // Span de assinatura do contrato
+  span ContractSignature {
+    id: "governance-contract-signature-${timestamp}"
+    type: "contract_signature"
+    timestamp: "${current_time}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "contract_name", value: "governanca" },
+      { name: "contract_version", value: "1.0.0" },
+      { name: "signature_type", value: "institutional_contract" }
+    ]
+  }
+}

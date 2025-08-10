@@ -1,0 +1,282 @@
+// LogLine Cron Diário
+// Trigger para execução automática de tarefas diárias
+// --------------------------------------------------------------
+
+contract CronDiario {
+  title: "Trigger de Tarefas Programadas Diárias"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-04"
+  tags: ["trigger", "cron", "daily", "maintenance", "institutional"]
+  
+  // Definições e Conceitos
+  definitions {
+    term Trigger {
+      description: "Mecanismo que monitora condições ou eventos temporais e dispara execução automática de spans quando as condições são satisfeitas."
+    }
+    
+    term Cron {
+      description: "Padrão de agendamento temporal que define quando tarefas programadas devem ser executadas."
+    }
+    
+    term TarefaProgramada {
+      description: "Span que deve ser executado automaticamente em horário específico, sem intervenção manual."
+    }
+  }
+  
+  // Configuração do trigger
+  trigger_config {
+    // Tipo de trigger
+    type: "temporal"
+    
+    // Intervalo de execução em formato cron
+    schedule: "0 0 * * *"  // Executar diariamente à meia-noite
+    
+    // Timezone para o agendamento
+    timezone: "UTC"
+    
+    // Tolerância de atraso (em segundos)
+    delay_tolerance: 300
+    
+    // Comportamento em caso de falha
+    failure_behavior: "retry"
+    max_retries: 3
+    retry_delay: 900  // 15 minutos
+  }
+  
+  // Span mestre de execução cron
+  span CronExecution {
+    id: "cron-daily-${timestamp}"
+    type: "cron_execution"
+    timestamp: "${current_time}"
+    actors: ["cron_service", "system"]
+    fields: [
+      { name: "trigger_name", value: "cron.daily" },
+      { name: "execution_time", value: "${current_time}" },
+      { name: "status", value: "started" }
+    ]
+    children: [
+      "TimelineOptimization",
+      "EmbeddingsRefresh",
+      "HealthCheck",
+      "MetricsCollection",
+      "BackupCreation"
+    ]
+  }
+  
+  // Tarefa 1: Otimização da timeline
+  span TimelineOptimization {
+    id: "timeline-optimize-${timestamp}"
+    type: "timeline_maintenance"
+    timestamp: "${current_time + 1m}"
+    actors: ["timeline_manager"]
+    fields: [
+      { name: "operation", value: "optimize" },
+      { name: "target_timeline", value: "timeline/main.timeline" },
+      { name: "status", value: "running" }
+    ]
+    timeouts: {
+      execution: 600  // 10 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "spans_collapsed", value: "${collapsed_count}" },
+        { name: "size_reduction_percent", value: "${reduction_percent}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Tarefa 2: Atualização de embeddings
+  span EmbeddingsRefresh {
+    id: "embeddings-refresh-${timestamp}"
+    type: "embeddings_maintenance"
+    timestamp: "${current_time + 2m}"
+    actors: ["embedding_manager"]
+    fields: [
+      { name: "operation", value: "refresh" },
+      { name: "target_index", value: "embeddings/knowledge.index" },
+      { name: "status", value: "running" }
+    ]
+    timeouts: {
+      execution: 1200  // 20 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "vectors_added", value: "${added_count}" },
+        { name: "vectors_updated", value: "${updated_count}" },
+        { name: "vectors_total", value: "${total_count}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Tarefa 3: Verificação de saúde do sistema
+  span HealthCheck {
+    id: "health-check-${timestamp}"
+    type: "system_health"
+    timestamp: "${current_time + 3m}"
+    actors: ["diagnostic_service"]
+    fields: [
+      { name: "operation", value: "health_check" },
+      { name: "check_scope", value: "full" },
+      { name: "status", value: "running" }
+    ]
+    timeouts: {
+      execution: 300  // 5 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "health_score", value: "${health_score}" },
+        { name: "issues_detected", value: "${issues_count}" },
+        { name: "recommendations", value: "${recommendations}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Tarefa 4: Coleta de métricas
+  span MetricsCollection {
+    id: "metrics-collect-${timestamp}"
+    type: "metrics_collection"
+    timestamp: "${current_time + 4m}"
+    actors: ["metrics_service"]
+    fields: [
+      { name: "operation", value: "collect" },
+      { name: "metrics_scope", value: "institutional" },
+      { name: "status", value: "running" }
+    ]
+    timeouts: {
+      execution: 300  // 5 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "metrics_count", value: "${metrics_count}" },
+        { name: "report_path", value: "metrics/${date}_daily.json" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Tarefa 5: Criação de backup
+  span BackupCreation {
+    id: "backup-create-${timestamp}"
+    type: "backup_operation"
+    timestamp: "${current_time + 5m}"
+    actors: ["backup_service"]
+    fields: [
+      { name: "operation", value: "create" },
+      { name: "backup_type", value: "daily" },
+      { name: "status", value: "running" }
+    ]
+    timeouts: {
+      execution: 1800  // 30 minutos
+    }
+    on_success: {
+      fields: [
+        { name: "status", value: "completed" },
+        { name: "backup_path", value: "backups/${date}_daily.zst" },
+        { name: "backup_size_mb", value: "${backup_size}" },
+        { name: "backup_hash", value: "${backup_hash}" }
+      ]
+    }
+    on_failure: {
+      fields: [
+        { name: "status", value: "failed" },
+        { name: "error", value: "${error_message}" }
+      ]
+    }
+  }
+  
+  // Finalização do cron
+  span CronCompletion {
+    id: "cron-completion-${timestamp}"
+    type: "cron_completion"
+    timestamp: "${current_time + 35m}"
+    actors: ["cron_service", "system"]
+    depends_on: [
+      "TimelineOptimization",
+      "EmbeddingsRefresh",
+      "HealthCheck",
+      "MetricsCollection",
+      "BackupCreation"
+    ]
+    fields: [
+      { name: "trigger_name", value: "cron.daily" },
+      { name: "execution_time", value: "${current_time}" },
+      { name: "completion_time", value: "${current_time + 35m}" },
+      { name: "status", value: "completed" },
+      { name: "next_scheduled", value: "${next_scheduled_time}" }
+    ]
+  }
+  
+  // Regras para notificação
+  notification_rules {
+    // Notificar em caso de falha crítica
+    critical_failure: {
+      conditions: [
+        "HealthCheck.status == 'failed'",
+        "BackupCreation.status == 'failed'"
+      ],
+      notification_type: "alert",
+      channels: ["system_span", "email"]
+    },
+    
+    // Notificar em caso de problemas de saúde
+    health_warning: {
+      conditions: [
+        "HealthCheck.health_score < 80",
+        "HealthCheck.issues_detected > 0"
+      ],
+      notification_type: "warning",
+      channels: ["system_span"]
+    },
+    
+    // Resumo diário
+    daily_summary: {
+      conditions: [
+        "CronCompletion.status == 'completed'"
+      ],
+      notification_type: "info",
+      channels: ["system_span"],
+      include_metrics: true
+    }
+  }
+  
+  // Span de assinatura do trigger
+  span TriggerSignature {
+    id: "trigger-signature-${timestamp}"
+    type: "trigger_signature"
+    timestamp: "${current_time}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "trigger_name", value: "cron.daily" },
+      { name: "version", value: "1.0.0" },
+      { name: "status", value: "active" }
+    ]
+  }
+}

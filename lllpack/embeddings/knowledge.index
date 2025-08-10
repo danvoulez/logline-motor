@@ -1,0 +1,197 @@
+{
+  "index_metadata": {
+    "name": "knowledge_institutional",
+    "version": "1.0.0",
+    "created": "2025-08-04T10:23:14.563Z",
+    "algorithm": "hnsw",
+    "dimension": 1536,
+    "distance_metric": "cosine",
+    "model": "institutional-embeddings-v1",
+    "total_vectors": 1254
+  },
+  "index_structure": {
+    "graph_layers": 4,
+    "max_connections": 16,
+    "ef_construction": 100,
+    "ef_search": 40,
+    "allow_replace": false,
+    "shard_count": 1
+  },
+  "vectors_sample": [
+    {
+      "id": "const_art1_cl1",
+      "text": "Artigo 1, Cláusula 1: Todo span na timeline institucional é soberano e representa uma operação atômica, auditável e verificável.",
+      "vector": [0.023, -0.145, 0.067, ...],
+      "metadata": {
+        "source": "contracts/constituicao.lll",
+        "type": "constitutional_clause",
+        "category": "sovereignty"
+      }
+    },
+    {
+      "id": "const_art2_cl3",
+      "text": "Artigo 2, Cláusula 3: A timeline institucional é imutável e representa o registro canônico de toda a história institucional.",
+      "vector": [-0.078, 0.213, -0.094, ...],
+      "metadata": {
+        "source": "contracts/constituicao.lll",
+        "type": "constitutional_clause",
+        "category": "timeline"
+      }
+    },
+    {
+      "id": "const_art3_cl2",
+      "text": "Artigo 3, Cláusula 2: Todos os spans na timeline devem ser assinados pelos atores responsáveis, garantindo não-repúdio e auditabilidade.",
+      "vector": [0.132, 0.056, -0.187, ...],
+      "metadata": {
+        "source": "contracts/constituicao.lll",
+        "type": "constitutional_clause",
+        "category": "accountability"
+      }
+    },
+    {
+      "id": "deploy_step1",
+      "text": "Na etapa de build do deployment, o código-fonte é compilado e os artefatos são produzidos para distribuição.",
+      "vector": [-0.043, 0.111, 0.078, ...],
+      "metadata": {
+        "source": "contracts/infra/deploy.logline",
+        "type": "deployment_step",
+        "category": "build"
+      }
+    },
+    {
+      "id": "deploy_step3",
+      "text": "Na etapa de package do deployment, os artefatos compilados são empacotados em formato distribuível.",
+      "vector": [-0.067, 0.124, 0.089, ...],
+      "metadata": {
+        "source": "contracts/infra/deploy.logline",
+        "type": "deployment_step",
+        "category": "package"
+      }
+    },
+    {
+      "id": "deploy_rollback",
+      "text": "Em caso de falha em qualquer etapa, o sistema iniciará rollback automático para o estado anterior estável.",
+      "vector": [0.098, -0.076, -0.134, ...],
+      "metadata": {
+        "source": "contracts/infra/deploy.logline",
+        "type": "deployment_operation",
+        "category": "rollback"
+      }
+    },
+    {
+      "id": "tenant_rule1",
+      "text": "Todo tenant possui identidade soberana, manifestada por seu identificador único, chaves criptográficas próprias e timeline isolada.",
+      "vector": [0.112, 0.067, -0.098, ...],
+      "metadata": {
+        "source": "contracts/regras_tenant.lll",
+        "type": "tenant_rule",
+        "category": "identity"
+      }
+    },
+    {
+      "id": "tenant_rule7",
+      "text": "Cada tenant possui sua própria timeline, onde todos seus spans são registrados de forma imutável e cronologicamente ordenada.",
+      "vector": [0.076, -0.124, 0.043, ...],
+      "metadata": {
+        "source": "contracts/regras_tenant.lll",
+        "type": "tenant_rule",
+        "category": "timeline"
+      }
+    },
+    {
+      "id": "boot_sequence",
+      "text": "A sequência de boot inicia a timeline, carrega contratos, ativa agentes, conecta embeddings e executa diagnóstico.",
+      "vector": [-0.021, -0.078, 0.156, ...],
+      "metadata": {
+        "source": "spans/boot_sequence.lll",
+        "type": "boot_sequence",
+        "category": "initialization"
+      }
+    },
+    {
+      "id": "agent_validator",
+      "text": "O Validador Institucional é responsável por verificar a conformidade de spans, contratos e decisões com a constituição institucional.",
+      "vector": [0.087, 0.032, 0.145, ...],
+      "metadata": {
+        "source": "agents/validator_llm.lll",
+        "type": "agent_description",
+        "category": "validation"
+      }
+    },
+    {
+      "id": "agent_companion",
+      "text": "O Companheiro Institucional representa a inteligência institucional do sistema, com acesso completo à timeline, embeddings e capacidade de despachar spans.",
+      "vector": [0.123, -0.043, 0.089, ...],
+      "metadata": {
+        "source": "agents/companheiro_institucional.lll",
+        "type": "agent_description",
+        "category": "institutional_intelligence"
+      }
+    },
+    {
+      "id": "concept_span",
+      "text": "Um span é a unidade fundamental de execução no LogLine, representando uma operação atômica com metadados, atores e campos de dados.",
+      "vector": [-0.056, 0.078, 0.112, ...],
+      "metadata": {
+        "source": "docs/ARCHITECTURE.md",
+        "type": "concept_definition",
+        "category": "span"
+      }
+    },
+    {
+      "id": "concept_timeline",
+      "text": "A timeline é o registro cronológico e causal de todos os spans executados, permitindo auditoria completa e reversão de operações.",
+      "vector": [0.045, 0.132, -0.067, ...],
+      "metadata": {
+        "source": "docs/ARCHITECTURE.md",
+        "type": "concept_definition",
+        "category": "timeline"
+      }
+    },
+    {
+      "id": "concept_contract",
+      "text": "Um contrato LogLine define regras, direitos, responsabilidades e spans executáveis, formando a base da governança institucional.",
+      "vector": [0.078, -0.098, -0.021, ...],
+      "metadata": {
+        "source": "docs/ARCHITECTURE.md",
+        "type": "concept_definition",
+        "category": "contract"
+      }
+    },
+    {
+      "id": "security_verification",
+      "text": "Todos os componentes do lllpack são verificados criptograficamente para garantir autenticidade e integridade.",
+      "vector": [-0.132, -0.067, -0.087, ...],
+      "metadata": {
+        "source": "docs/SECURITY.md",
+        "type": "security_principle",
+        "category": "verification"
+      }
+    }
+  ],
+  "metadata_schema": {
+    "properties": {
+      "source": {
+        "type": "string",
+        "description": "Caminho do arquivo fonte do conhecimento"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["constitutional_clause", "deployment_step", "deployment_operation", "tenant_rule", "boot_sequence", "agent_description", "concept_definition", "security_principle"],
+        "description": "Tipo do conhecimento institucional"
+      },
+      "category": {
+        "type": "string",
+        "description": "Categoria temática do conhecimento"
+      }
+    },
+    "required": ["source", "type", "category"]
+  },
+  "index_status": {
+    "last_update": "2025-08-04T10:23:14.563Z",
+    "status": "ready",
+    "records_count": 1254,
+    "memory_usage_mb": 487,
+    "disk_size_mb": 214
+  }
+}

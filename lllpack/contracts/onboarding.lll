@@ -1,0 +1,305 @@
+// Contrato de Onboarding Institucional
+// Define o processo formal para integração de novos componentes ao lllpack
+// --------------------------------------------------------------
+
+contract Onboarding {
+  title: "Processo de Onboarding Institucional"
+  version: "1.0.0"
+  author: "LogLine Engineering Team"
+  created: "2025-08-04"
+  tags: ["onboarding", "institutional", "integration", "governance", "process"]
+  
+  // Definições e Conceitos
+  definitions {
+    term ComponenteInstitucional {
+      description: "Qualquer elemento que pode ser integrado ao lllpack institucional, incluindo contratos, agentes, plugins, spans ou recursos."
+    }
+    
+    term CicloDeVida {
+      description: "Sequência de estados pelos quais um componente institucional passa, desde sua proposta até aposentadoria."
+    }
+    
+    term Requisitos {
+      description: "Conjunto de condições que devem ser satisfeitas para que um componente seja aprovado para integração institucional."
+    }
+  }
+  
+  // Tipos de componentes suportados
+  component_types {
+    contract: {
+      description: "Documentos formais que definem regras, direitos e responsabilidades.",
+      extension: ".lll",
+      validator: "contract_validator.wasm"
+    },
+    
+    agent: {
+      description: "Entidades LLM com personalidade, funções e permissões específicas.",
+      extension: ".lll",
+      validator: "agent_validator.wasm"
+    },
+    
+    plugin: {
+      description: "Componentes executáveis em formato WebAssembly que estendem funcionalidades.",
+      extension: ".wasm",
+      validator: "wasm_validator.wasm"
+    },
+    
+    span_template: {
+      description: "Modelos de spans para executar operações específicas.",
+      extension: ".lll",
+      validator: "span_validator.wasm"
+    },
+    
+    embedding: {
+      description: "Índices de memória vetorial para conhecimento institucional.",
+      extension: ".index",
+      validator: "embedding_validator.wasm"
+    }
+  }
+  
+  // Ciclo de vida de onboarding
+  lifecycle {
+    // Estado inicial: proposta
+    stage Proposal {
+      description: "Proposta formal do componente para integração."
+      required_fields: [
+        "component_name",
+        "component_type",
+        "purpose",
+        "author",
+        "version"
+      ]
+      approval_criteria: [
+        "complete_documentation",
+        "clear_purpose",
+        "unique_name"
+      ]
+    }
+    
+    // Revisão técnica
+    stage TechnicalReview {
+      description: "Avaliação técnica do componente por especialistas."
+      required_actions: [
+        "code_review",
+        "security_scan",
+        "compliance_check"
+      ]
+      approval_criteria: [
+        "passes_validation",
+        "no_critical_vulnerabilities",
+        "complies_with_standards"
+      ]
+    }
+    
+    // Teste em sandbox
+    stage SandboxTesting {
+      description: "Execução do componente em ambiente isolado para verificar comportamento."
+      required_actions: [
+        "sandbox_deployment",
+        "functional_testing",
+        "resource_usage_monitoring"
+      ]
+      approval_criteria: [
+        "functions_as_expected",
+        "respects_resource_limits",
+        "no_sandbox_escapes"
+      ]
+    }
+    
+    // Votação de aprovação
+    stage ApprovalVoting {
+      description: "Processo de votação formal para aprovação do componente."
+      required_actions: [
+        "publish_review_results",
+        "collect_votes_from_authority_agents",
+        "tally_results"
+      ]
+      approval_criteria: [
+        "majority_approval",
+        "no_constitutional_conflicts",
+        "executive_sign_off"
+      ]
+    }
+    
+    // Integração
+    stage Integration {
+      description: "Integração formal do componente ao lllpack institucional."
+      required_actions: [
+        "digital_signing",
+        "timeline_registration",
+        "manifest_update"
+      ]
+    }
+    
+    // Monitoramento
+    stage Monitoring {
+      description: "Acompanhamento contínuo do componente após integração."
+      ongoing_checks: [
+        "performance_monitoring",
+        "usage_statistics",
+        "anomaly_detection"
+      ]
+    }
+  }
+  
+  // Requisitos por tipo de componente
+  requirements {
+    // Requisitos para contratos
+    contract_requirements: [
+      "Deve conter título, versão e autor claramente identificados.",
+      "Deve estar em conformidade com a constituição institucional.",
+      "Deve ter cláusulas claramente estruturadas e numeradas.",
+      "Deve incluir span de assinatura para validação.",
+      "Não deve contradizer contratos existentes sem procedimento formal de emenda."
+    ],
+    
+    // Requisitos para agentes
+    agent_requirements: [
+      "Deve declarar explicitamente todas as permissões solicitadas.",
+      "Deve definir identidade e comportamento consistente.",
+      "Deve respeitar limites de recursos institucionais.",
+      "Deve ter mecanismos de auditoria para todas as ações.",
+      "Deve implementar protocolos de falha segura."
+    ],
+    
+    // Requisitos para plugins
+    plugin_requirements: [
+      "Deve ser compilado para WebAssembly sem dependências externas.",
+      "Deve declarar explicitamente todas as permissões solicitadas.",
+      "Deve passar em análise estática de segurança.",
+      "Deve ser determinístico em seu comportamento.",
+      "Deve incluir testes automatizados."
+    ]
+  }
+  
+  // Spans para processo de onboarding
+  spans {
+    // Span de início do processo
+    span InitiateOnboarding {
+      id: "onboarding-initiate-${component_type}-${component_name}-${timestamp}"
+      type: "onboarding_initiate"
+      fields: [
+        { name: "component_type", value: "${component_type}" },
+        { name: "component_name", value: "${component_name}" },
+        { name: "component_version", value: "${component_version}" },
+        { name: "proposer", value: "${proposer}" },
+        { name: "status", value: "initiated" }
+      ]
+      children: [
+        "ProposalReview",
+        "TechnicalAssessment",
+        "SandboxTest",
+        "ApprovalVote",
+        "FinalIntegration"
+      ]
+    }
+    
+    // Revisão da proposta
+    span ProposalReview {
+      id: "onboarding-proposal-${component_name}-${timestamp}"
+      type: "proposal_review"
+      fields: [
+        { name: "component_name", value: "${component_name}" },
+        { name: "reviewer", value: "${reviewer}" },
+        { name: "documentation_score", value: "${documentation_score}" },
+        { name: "clarity_score", value: "${clarity_score}" },
+        { name: "uniqueness_check", value: "${uniqueness_result}" },
+        { name: "status", value: "${status}" },
+        { name: "notes", value: "${notes}" }
+      ]
+    }
+    
+    // Avaliação técnica
+    span TechnicalAssessment {
+      id: "onboarding-technical-${component_name}-${timestamp}"
+      type: "technical_assessment"
+      depends_on: ["ProposalReview"]
+      fields: [
+        { name: "component_name", value: "${component_name}" },
+        { name: "assessor", value: "${assessor}" },
+        { name: "code_review_result", value: "${code_review_result}" },
+        { name: "security_scan_result", value: "${security_scan_result}" },
+        { name: "compliance_result", value: "${compliance_result}" },
+        { name: "status", value: "${status}" },
+        { name: "findings", value: "${findings}" }
+      ]
+    }
+    
+    // Teste em sandbox
+    span SandboxTest {
+      id: "onboarding-sandbox-${component_name}-${timestamp}"
+      type: "sandbox_test"
+      depends_on: ["TechnicalAssessment"]
+      fields: [
+        { name: "component_name", value: "${component_name}" },
+        { name: "tester", value: "${tester}" },
+        { name: "functional_result", value: "${functional_result}" },
+        { name: "resource_usage", value: "${resource_usage}" },
+        { name: "sandbox_integrity", value: "${sandbox_integrity}" },
+        { name: "status", value: "${status}" },
+        { name: "test_report", value: "${test_report}" }
+      ]
+    }
+    
+    // Votação para aprovação
+    span ApprovalVote {
+      id: "onboarding-vote-${component_name}-${timestamp}"
+      type: "approval_vote"
+      depends_on: ["SandboxTest"]
+      fields: [
+        { name: "component_name", value: "${component_name}" },
+        { name: "votes_for", value: "${votes_for}" },
+        { name: "votes_against", value: "${votes_against}" },
+        { name: "abstentions", value: "${abstentions}" },
+        { name: "constitutional_check", value: "${constitutional_check}" },
+        { name: "executive_approval", value: "${executive_approval}" },
+        { name: "status", value: "${status}" },
+        { name: "vote_record", value: "${vote_record}" }
+      ]
+    }
+    
+    // Integração final
+    span FinalIntegration {
+      id: "onboarding-integrate-${component_name}-${timestamp}"
+      type: "final_integration"
+      depends_on: ["ApprovalVote"]
+      fields: [
+        { name: "component_name", value: "${component_name}" },
+        { name: "integrator", value: "${integrator}" },
+        { name: "digital_signature", value: "${digital_signature}" },
+        { name: "manifest_update_hash", value: "${manifest_update_hash}" },
+        { name: "timeline_record_id", value: "${timeline_record_id}" },
+        { name: "status", value: "integrated" },
+        { name: "integration_timestamp", value: "${current_time}" }
+      ]
+    }
+  }
+  
+  // Span para assinatura de componentes
+  span ComponentSignature {
+    id: "component-sign-${component_type}-${component_name}-${timestamp}"
+    type: "component_signature"
+    fields: [
+      { name: "component_type", value: "${component_type}" },
+      { name: "component_name", value: "${component_name}" },
+      { name: "component_version", value: "${component_version}" },
+      { name: "hash", value: "${content_hash}" },
+      { name: "signer", value: "${signer}" },
+      { name: "signature", value: "${signature}" },
+      { name: "timestamp", value: "${current_time}" }
+    ]
+  }
+  
+  // Span de assinatura do contrato
+  span ContractSignature {
+    id: "onboarding-contract-signature-${timestamp}"
+    type: "contract_signature"
+    timestamp: "${current_time}"
+    actors: ["LogLine Engineering Team", "system"]
+    fields: [
+      { name: "contract_name", value: "Onboarding" },
+      { name: "version", value: "1.0.0" },
+      { name: "hash", value: "${content_hash}" }
+    ]
+  }
+}

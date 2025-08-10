@@ -1,0 +1,46 @@
+[package]
+name = "institutional-deployment-orchestrator"
+version = "1.0.0"
+description = "Orquestrador de Deployment Institucional para LogLine"
+license = "Proprietary"
+author = "VOULEZVOUS.TV"
+repository = "https://github.com/voulezvous/logline-deployment"
+documentation = "https://docs.voulezvous.ai/logline/deployment"
+
+[metadata]
+institutional = true
+critical = true
+verified = true
+governance_tier = "sovereign"
+audit_level = "full"
+created_at = "2025-08-03T18:56:20+01:00"
+
+[dependencies]
+core = ">=1.0.0"
+timeline = ">=1.0.0"
+wasm_sandbox = ">=1.0.0"
+
+[capabilities]
+deployment = true
+infrastructure = true
+timeline_write = true
+wasm_execution = true
+network = ["api.voulezvous.ai"]
+filesystem = ["config", "artifacts", "plugins"]
+
+[settings]
+auto_rollback = true
+strict_validation = false
+metrics_enabled = true
+
+[paths]
+plugins = "${LOGLINE_HOME}/plugins/deployment"
+config = "${LOGLINE_HOME}/config/deployment"
+artifacts = "${LOGLINE_HOME}/artifacts/deployment"
+logs = "${LOGLINE_HOME}/logs/deployment"
+
+[security]
+signature_verification = true
+sandbox_isolation = "strict"
+capability_enforcement = true
+sensitive_data_handling = "encrypted"
