@@ -1,0 +1,9 @@
+# === File: docker-compose.yml ===
+# DEPRECATED: Este arquivo foi mantido apenas para referência histórica.
+# A orquestração por Docker e serviços SaaS foi removida deste projeto.
+# Para executar o LogLine Motor utilize o pacote lllpack presente em
+# `lllpack/` e os scripts `run.sh` e `pack.sh` descritos na documentação.
+
+version: '0'
+services: {}
+volumes: {}
